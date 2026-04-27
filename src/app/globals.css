@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+@theme {
+  --color-shaadi-red: #DC2626;
+  --color-shaadi-rose: #F43F5E;
+  --color-shaadi-pink: #FB7185;
+  --color-shaadi-light: #FFE4E6;
+  --color-shaadi-warm-gray: #F9FAFB;
+  --color-shaadi-warm-gray-dark: #F3F4F6;
+}
