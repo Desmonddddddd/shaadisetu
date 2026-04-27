@@ -7,4 +7,107 @@
   --color-shaadi-light: #FFE4E6;
   --color-shaadi-warm-gray: #F9FAFB;
   --color-shaadi-warm-gray-dark: #F3F4F6;
+  --color-shaadi-deep: #9F1239;
+  --color-shaadi-cream: #FFF7ED;
+}
+
+/* ─── Scroll-reveal animation system ─── */
+
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scroll-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── Hero entrance keyframes ─── */
+
+@keyframes hero-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-animate {
+  opacity: 0;
+  animation: hero-fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.hero-delay-1 { animation-delay: 0ms; }
+.hero-delay-2 { animation-delay: 150ms; }
+.hero-delay-3 { animation-delay: 300ms; }
+.hero-delay-4 { animation-delay: 450ms; }
+.hero-delay-5 { animation-delay: 600ms; }
+
+/* ─── Card hover ─── */
+
+.card-hover {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px -8px rgba(0, 0, 0, 0.1);
+  border-color: #e5e7eb;
+}
+
+/* ─── Animated link underline ─── */
+
+.link-underline {
+  position: relative;
+}
+
+.link-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1.5px;
+  background: linear-gradient(to right, #DC2626, #F43F5E);
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.link-underline:hover::after {
+  width: 100%;
+}
+
+/* ─── Stat divider ─── */
+
+.stat-divider {
+  position: relative;
+}
+
+.stat-divider:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: -1rem;
+  top: 25%;
+  height: 50%;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* ─── Button arrow shift ─── */
+
+.btn-arrow svg,
+.btn-arrow .arrow-icon {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-arrow:hover svg,
+.btn-arrow:hover .arrow-icon {
+  transform: translateX(3px);
 }

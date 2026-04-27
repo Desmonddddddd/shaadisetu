@@ -78,6 +78,16 @@ export const blogPosts: BlogPost[] = [
     readTime: "11 min read",
   },
   {
+    id: "wedding-gifting-ideas-2026",
+    title:
+      "50 Unique Wedding Gift Ideas That Couples Will Actually Love in 2026",
+    excerpt:
+      "Forget the generic dinner sets and cash envelopes. From personalized couple portraits and luxury hampers to experience vouchers and eco-friendly gift boxes — here are the most thoughtful wedding gift ideas that couples will cherish forever.",
+    date: "April 25, 2026",
+    category: "Gifting Ideas",
+    readTime: "9 min read",
+  },
+  {
     id: "budget-vs-luxury",
     title:
       "Budget vs Luxury: What Indian Couples Are Really Spending on Weddings",
@@ -96,5 +106,6 @@ export const blogCategories = [
   "Bridal Tips",
   "Venue Ideas",
   "Real Weddings",
+  "Gifting Ideas",
 ] as const;
 export type BlogCategory = (typeof blogCategories)[number];

@@ -9,7 +9,7 @@ const steps = [
     number: "2",
     title: "Browse Categories",
     description:
-      "Explore 12+ categories — from bridal wear and venues to photographers and caterers.",
+      "Explore 18+ categories — from venues and decor to photography, catering, and more.",
   },
   {
     number: "3",

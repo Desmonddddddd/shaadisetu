@@ -33,23 +33,55 @@ export default function MobileMenu() {
           </div>
           <nav className="flex flex-col gap-2">
             <Link
-              href="/"
+              href="/about"
               onClick={() => setIsOpen(false)}
               className="px-4 py-2 text-sm font-medium text-slate-700 hover:bg-rose-50 rounded-lg transition-colors"
             >
-              Home
+              About Us
             </Link>
             <Link
-              href="/blog"
+              href="/vendors"
               onClick={() => setIsOpen(false)}
               className="px-4 py-2 text-sm font-medium text-slate-700 hover:bg-rose-50 rounded-lg transition-colors"
             >
-              Blog
+              Vendors
+            </Link>
+            <Link
+              href="/categories"
+              onClick={() => setIsOpen(false)}
+              className="px-4 py-2 text-sm font-medium text-slate-700 hover:bg-rose-50 rounded-lg transition-colors"
+            >
+              Categories
+            </Link>
+            <Link
+              href="/functions"
+              onClick={() => setIsOpen(false)}
+              className="px-4 py-2 text-sm font-medium text-slate-700 hover:bg-rose-50 rounded-lg transition-colors"
+            >
+              Functions
+            </Link>
+            <Link
+              href="/client-diaries"
+              onClick={() => setIsOpen(false)}
+              className="px-4 py-2 text-sm font-medium text-slate-700 hover:bg-rose-50 rounded-lg transition-colors"
+            >
+              Client Diaries
             </Link>
           </nav>
-          <button className="w-full py-2.5 text-sm font-semibold text-white rounded-lg bg-gradient-to-r from-shaadi-red via-shaadi-rose to-shaadi-pink hover:opacity-90 transition-opacity">
-            List Your Business
-          </button>
+          <Link
+            href="/membership"
+            onClick={() => setIsOpen(false)}
+            className="block w-full py-2.5 text-sm font-semibold text-amber-700 text-center rounded-lg border border-amber-300 bg-amber-50 hover:bg-amber-100 transition-colors"
+          >
+            Become Pro
+          </Link>
+          <Link
+            href="/signup"
+            onClick={() => setIsOpen(false)}
+            className="block w-full py-2.5 text-sm font-semibold text-white text-center rounded-lg bg-gradient-to-r from-shaadi-red via-shaadi-rose to-shaadi-pink hover:opacity-90 transition-opacity"
+          >
+            Sign Up
+          </Link>
         </div>
       )}
     </div>

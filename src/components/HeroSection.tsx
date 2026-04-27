@@ -1,81 +1,117 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { categories } from "@/data/categories";
-import { useCity } from "@/context/CityContext";
-import CitySearch from "./CitySearch";
+import { cities } from "@/data/cities";
+import { useCountUp } from "@/hooks/useCountUp";
 
 export default function HeroSection() {
-  const { selectedCity } = useCity();
+  const [selectedCity, setSelectedCity] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
+
+  const [vendorRef, vendorCount] = useCountUp<HTMLDivElement>(50000, 2200, (n) => n.toLocaleString("en-IN") + "+");
+  const [cityRef, cityCount] = useCountUp<HTMLDivElement>(500, 1800, (n) => n.toLocaleString("en-IN") + "+");
+  const [coupleRef, coupleCount] = useCountUp<HTMLDivElement>(100000, 2500, (n) => n.toLocaleString("en-IN") + "+");
+
+  const states = useMemo(() => {
+    const grouped: Record<string, string[]> = {};
+    for (const city of cities) {
+      if (!grouped[city.state]) grouped[city.state] = [];
+      grouped[city.state].push(city.name);
+    }
+    return Object.entries(grouped).sort(([a], [b]) => a.localeCompare(b));
+  }, []);
 
   return (
     <section className="relative overflow-hidden">
       {/* Gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-shaadi-red via-shaadi-rose to-shaadi-pink" />
+      <div className="absolute inset-0 bg-gradient-to-br from-shaadi-deep via-shaadi-red to-shaadi-rose" />
 
-      {/* Subtle pattern overlay */}
+      {/* Subtle radial glow */}
       <div
-        className="absolute inset-0 opacity-10"
+        className="absolute inset-0 opacity-30"
         style={{
-          backgroundImage: `radial-gradient(circle at 25% 25%, white 1px, transparent 1px), radial-gradient(circle at 75% 75%, white 1px, transparent 1px)`,
-          backgroundSize: "40px 40px",
+          background: "radial-gradient(ellipse at 30% 20%, rgba(255,255,255,0.15) 0%, transparent 60%), radial-gradient(ellipse at 70% 80%, rgba(251,113,133,0.2) 0%, transparent 50%)",
         }}
       />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
         <div className="text-center">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
-            Your Perfect Wedding,
-            <br />
-            <span className="text-yellow-100">One Click Away</span>
-          </h1>
-          <p className="mt-4 text-lg md:text-xl text-rose-100 max-w-2xl mx-auto">
-            Discover the best wedding vendors, venues, and services across India.
-            {selectedCity && (
-              <span className="block mt-1 font-semibold text-white">
-                Showing results for {selectedCity.name}, {selectedCity.state}
-              </span>
-            )}
+          {/* Eyebrow */}
+          <p className="hero-animate hero-delay-1 text-xs font-semibold uppercase tracking-[0.2em] text-rose-200 mb-4">
+            India&apos;s #1 Wedding Platform
           </p>
 
-          {/* Inline search bar */}
-          <div className="mt-8 max-w-3xl mx-auto">
-            <div className="bg-white rounded-xl shadow-2xl p-2 flex flex-col sm:flex-row gap-2">
-              <div className="flex-1 min-w-0">
-                <CitySearch />
-              </div>
+          {/* Heading — serif */}
+          <h1 className="hero-animate hero-delay-2 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold font-[family-name:var(--font-cormorant)] text-white leading-[1.1]">
+            Shaadi Ki Har Zaroorat,
+            <br />
+            <span className="italic text-rose-100">Ek Hi Jagah</span>
+          </h1>
+
+          {/* Subtitle */}
+          <p className="hero-animate hero-delay-3 mt-5 text-base md:text-lg text-rose-100/90 max-w-2xl mx-auto leading-relaxed">
+            Discover the best wedding vendors, venues, and services across India.
+          </p>
+
+          {/* Search bar */}
+          <div className="hero-animate hero-delay-4 mt-10 max-w-3xl mx-auto">
+            <div className="bg-white rounded-2xl shadow-2xl p-2.5 flex flex-col sm:flex-row gap-2">
+              {/* City */}
+              <select
+                value={selectedCity}
+                onChange={(e) => setSelectedCity(e.target.value)}
+                className="flex-1 px-4 py-3 text-sm text-slate-700 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-shaadi-rose/50 appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M6%209l6%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[length:12px] bg-[right_12px_center] bg-no-repeat pr-8"
+              >
+                <option value="">Select City</option>
+                {states.map(([state, cityNames]) => (
+                  <optgroup key={state} label={state}>
+                    {cityNames.sort().map((name) => (
+                      <option key={`${name}-${state}`} value={name}>
+                        {name}
+                      </option>
+                    ))}
+                  </optgroup>
+                ))}
+              </select>
+
+              {/* Category — no emojis */}
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="px-4 py-2.5 text-sm text-slate-700 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-shaadi-rose"
+                className="flex-1 px-4 py-3 text-sm text-slate-700 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-shaadi-rose/50 appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M6%209l6%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[length:12px] bg-[right_12px_center] bg-no-repeat pr-8"
               >
-                <option value="">All Categories</option>
+                <option value="">Select Category</option>
                 {categories.map((cat) => (
                   <option key={cat.id} value={cat.id}>
-                    {cat.emoji} {cat.name}
+                    {cat.name}
                   </option>
                 ))}
               </select>
-              <button className="px-6 py-2.5 text-sm font-semibold text-white rounded-lg bg-gradient-to-r from-shaadi-red to-shaadi-rose hover:opacity-90 transition-opacity shadow-sm whitespace-nowrap">
-                Search Vendors
+
+              {/* Search button */}
+              <button className="btn-arrow px-8 py-3 text-sm font-semibold text-white rounded-xl bg-gradient-to-r from-shaadi-red to-shaadi-rose hover:from-shaadi-deep hover:to-shaadi-red transition-all shadow-sm whitespace-nowrap flex items-center justify-center gap-2">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                Search
               </button>
             </div>
           </div>
 
-          {/* Quick stats */}
-          <div className="mt-10 flex flex-wrap justify-center gap-8 text-white/90">
-            <div className="text-center">
-              <p className="text-2xl md:text-3xl font-bold">50,000+</p>
-              <p className="text-sm text-rose-100">Verified Vendors</p>
+          {/* Stats with dividers — count-up animation */}
+          <div className="hero-animate hero-delay-5 mt-12 flex flex-wrap justify-center gap-8 md:gap-12 text-white/90">
+            <div ref={vendorRef} className="text-center stat-divider px-4">
+              <p className="text-3xl md:text-4xl font-bold font-[family-name:var(--font-cormorant)] tabular-nums">{vendorCount}</p>
+              <p className="text-xs uppercase tracking-wider text-rose-200 mt-1">Verified Vendors</p>
             </div>
-            <div className="text-center">
-              <p className="text-2xl md:text-3xl font-bold">500+</p>
-              <p className="text-sm text-rose-100">Cities Covered</p>
+            <div ref={cityRef} className="text-center stat-divider px-4">
+              <p className="text-3xl md:text-4xl font-bold font-[family-name:var(--font-cormorant)] tabular-nums">{cityCount}</p>
+              <p className="text-xs uppercase tracking-wider text-rose-200 mt-1">Cities Covered</p>
             </div>
-            <div className="text-center">
-              <p className="text-2xl md:text-3xl font-bold">1,00,000+</p>
-              <p className="text-sm text-rose-100">Happy Couples</p>
+            <div ref={coupleRef} className="text-center px-4">
+              <p className="text-3xl md:text-4xl font-bold font-[family-name:var(--font-cormorant)] tabular-nums">{coupleCount}</p>
+              <p className="text-xs uppercase tracking-wider text-rose-200 mt-1">Happy Couples</p>
             </div>
           </div>
         </div>

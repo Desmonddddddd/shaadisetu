@@ -1,15 +1,15 @@
 import HeroSection from "@/components/HeroSection";
-import CategoriesGrid from "@/components/CategoriesGrid";
-import HowItWorks from "@/components/HowItWorks";
-import PopularCities from "@/components/PopularCities";
+import EntryPaths from "@/components/EntryPaths";
+import TopVendors from "@/components/TopVendors";
+import ShaadiSetuWay from "@/components/ShaadiSetuWay";
 
 export default function Home() {
   return (
     <>
       <HeroSection />
-      <CategoriesGrid />
-      <HowItWorks />
-      <PopularCities />
+      <EntryPaths />
+      <ShaadiSetuWay />
+      <TopVendors />
     </>
   );
 }
