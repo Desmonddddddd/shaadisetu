@@ -27,7 +27,14 @@ const TEMPLATES = [
   { title: "Punctual and creative", body: "Showed up early, stayed late, and captured frames we didn't even realize were happening." },
 ];
 
-const EVENT_TYPES = ["Wedding · Dec 2025", "Reception · Nov 2025", "Engagement · Oct 2025", "Haldi · Sep 2025", "Mehendi · Aug 2025"];
+const EVENT_NAMES = ["Wedding", "Reception", "Engagement", "Haldi", "Mehendi"];
+
+function eventLabel(name: string, monthsAgo: number): string {
+  const d = new Date();
+  d.setMonth(d.getMonth() - monthsAgo);
+  const m = d.toLocaleString("en-US", { month: "short" });
+  return `${name} · ${m} ${d.getFullYear()}`;
+}
 
 function hash(s: string): number {
   let h = 0;
@@ -42,7 +49,8 @@ function buildReviews(vendorId: string, vendorRating: number): Review[] {
   for (let i = 0; i < count; i++) {
     const t = TEMPLATES[(seed + i * 3) % TEMPLATES.length];
     const author = AUTHORS[(seed + i * 5) % AUTHORS.length];
-    const event = EVENT_TYPES[(seed + i * 7) % EVENT_TYPES.length];
+    const name = EVENT_NAMES[(seed + i * 7) % EVENT_NAMES.length];
+    const event = eventLabel(name, i + 1);
     // Cluster ratings around the vendor's overall rating: ±1, clamped 1..5
     const drift = ((seed + i * 11) % 3) - 1; // -1, 0, +1
     const rating = Math.max(1, Math.min(5, Math.round(vendorRating + drift)));
