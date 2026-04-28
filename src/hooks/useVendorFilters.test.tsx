@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { renderHook, act } from "@testing-library/react";
 import { useVendorFilters, applyFilters, FilterState } from "./useVendorFilters";
 import { sampleVendors } from "@/data/vendors";
+import { bookedDatesByVendor } from "@/data/availability";
 
 const replaceMock = vi.fn();
 let searchParams = new URLSearchParams();
@@ -43,5 +44,22 @@ describe("useVendorFilters", () => {
     const { result } = renderHook(() => useVendorFilters());
     act(() => result.current.setFilter("rating", 4.5));
     expect(replaceMock).toHaveBeenCalledWith(expect.stringContaining("rating=4.5"));
+  });
+});
+
+describe("applyFilters — booked + sort interaction", () => {
+  it("booked vendors stay at the bottom when sort=rating and date is set", () => {
+    const v = sampleVendors[0];
+    const date = bookedDatesByVendor[v.id][0];
+    const out = applyFilters(sampleVendors, { sort: "rating", date } as FilterState);
+
+    let seenAvailableAfterBooked = false;
+    let lastWasBooked = false;
+    for (const x of out) {
+      const booked = bookedDatesByVendor[x.id]?.includes(date) ?? false;
+      if (lastWasBooked && !booked) seenAvailableAfterBooked = true;
+      lastWasBooked = booked;
+    }
+    expect(seenAvailableAfterBooked).toBe(false);
   });
 });
