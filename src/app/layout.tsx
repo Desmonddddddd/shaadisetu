@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Cormorant_Garamond } from "next/font/google";
 import { CityProvider } from "@/context/CityContext";
+import { CompareProvider } from "@/context/CompareContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import "./globals.css";
@@ -23,9 +24,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className={`${geist.variable} ${geistMono.variable} ${cormorant.variable} font-[family-name:var(--font-geist)] antialiased bg-white text-slate-900`}>
         <CityProvider>
-          <Navbar />
-          <main className="min-h-screen">{children}</main>
-          <Footer />
+          <CompareProvider>
+            <Navbar />
+            <main className="min-h-screen">{children}</main>
+            <Footer />
+          </CompareProvider>
         </CityProvider>
       </body>
     </html>
