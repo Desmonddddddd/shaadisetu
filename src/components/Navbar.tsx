@@ -54,12 +54,6 @@ export default function Navbar() {
           {/* Desktop right */}
           <div className="hidden md:flex items-center gap-4 ml-auto pl-8">
             <Link
-              href="/account/login"
-              className="text-[0.7rem] font-semibold tracking-[0.18em] uppercase text-ink-soft hover:text-bordeaux transition-colors"
-            >
-              Sign In
-            </Link>
-            <Link
               href="/account/signup"
               className="btn-editorial text-[0.7rem]"
             >
