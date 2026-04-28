@@ -34,7 +34,6 @@ export default function Navbar() {
             {[
               { label: "About Us", href: "/about" },
               { label: "Vendors", href: "/vendors" },
-              { label: "Categories", href: "/categories" },
               { label: "Functions", href: "/functions" },
               { label: "Client Diaries", href: "/client-diaries" },
             ].map((link) => (
