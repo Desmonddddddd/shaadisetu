@@ -1,6 +1,8 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { db } from "@/lib/db";
 import { getCategoryVendorCounts } from "@/lib/queries/vendors";
+import { SearchBar } from "@/components/search/SearchBar";
 
 const HIGHLIGHT_CITIES = ["Mumbai", "New Delhi", "Jaipur", "Bangalore", "Lucknow", "Udaipur"];
 
@@ -16,9 +18,12 @@ export default async function BrowseVendors() {
 
   return (
     <main className="max-w-6xl mx-auto px-4 py-8 space-y-10">
-      <header>
+      <header className="space-y-3">
         <h1 className="text-3xl font-semibold text-slate-900">Browse Vendors</h1>
-        <p className="text-slate-600 mt-1">Pick a city and a category to start exploring.</p>
+        <p className="text-slate-600">Pick a city and category, or search across all vendors.</p>
+        <Suspense fallback={<div className="h-12" />}>
+          <SearchBar initialQuery="" />
+        </Suspense>
       </header>
 
       <section>
