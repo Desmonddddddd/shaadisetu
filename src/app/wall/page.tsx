@@ -79,14 +79,22 @@ export default async function WallPage() {
             couples telling their own stories, and the unglamorous must-haves
             the rest of the internet forgets to mention.
           </p>
+        </div>
+      </section>
 
-          {/* Filter chips */}
-          <div className="fade-up stagger-3 mt-10 flex flex-wrap items-center justify-center gap-2">
+      {/* Filter chips — pulled out of the hero so they actually stand out
+          against a light strip instead of disappearing on the dark photo. */}
+      <section className="border-b border-ink/10 bg-cream-soft">
+        <div className="max-w-6xl mx-auto px-6 py-6 md:py-8">
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            <span className="text-[0.6rem] uppercase tracking-[0.28em] text-ink-soft mr-2 hidden sm:inline">
+              Jump to
+            </span>
             {WALL_SECTIONS.map((s) => (
               <a
                 key={s.slug}
                 href={`#${s.slug}`}
-                className="px-4 py-2 text-[0.68rem] uppercase tracking-[0.22em] border border-cream/30 text-cream/85 hover:border-champagne hover:text-champagne transition-colors"
+                className="px-4 py-2 text-[0.68rem] uppercase tracking-[0.22em] border border-ink/15 text-ink-soft hover:border-bordeaux hover:text-bordeaux transition-colors"
               >
                 {s.eyebrow.split("·")[1]?.trim() ?? s.title}
               </a>
@@ -95,7 +103,7 @@ export default async function WallPage() {
               <a
                 key={c.slug}
                 href={`#${c.slug}`}
-                className="px-4 py-2 text-[0.68rem] uppercase tracking-[0.22em] border border-champagne/60 text-champagne hover:bg-champagne hover:text-ink transition-colors"
+                className="px-4 py-2 text-[0.68rem] uppercase tracking-[0.22em] border border-bordeaux/40 text-bordeaux hover:bg-bordeaux hover:text-cream transition-colors"
               >
                 {c.label}
               </a>

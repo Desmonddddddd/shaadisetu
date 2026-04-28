@@ -146,7 +146,7 @@ export default function Footer() {
                     <li key={link.label}>
                       <Link
                         href={link.href}
-                        className="text-sm text-cream/70 hover:text-cream transition-colors editorial-link"
+                        className="text-sm font-light text-cream/65 hover:text-cream transition-colors editorial-link"
                       >
                         {link.label}
                       </Link>
@@ -211,14 +211,10 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Bottom bar */}
+      {/* Bottom bar — stacked & centred so everything sits in symmetry. */}
       <div className="border-t border-cream/10">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-cream/50 font-light tracking-wide">
-            &copy; {new Date().getFullYear()} ShaadiSetu Media Pvt. Ltd. — Made
-            with care in India.
-          </p>
-          <div className="flex items-center gap-x-6 gap-y-2 text-xs text-cream/50 flex-wrap justify-center md:justify-end">
+        <div className="max-w-4xl mx-auto px-6 lg:px-8 py-7 flex flex-col items-center gap-4 text-center">
+          <div className="flex items-center gap-x-5 gap-y-2 text-xs text-cream/55 flex-wrap justify-center">
             <Link href="/privacy" className="hover:text-champagne transition-colors">
               Privacy
             </Link>
@@ -235,6 +231,11 @@ export default function Footer() {
               Cookies
             </Link>
           </div>
+          <span className="block w-10 h-px bg-cream/15" />
+          <p className="text-xs text-cream/50 font-light tracking-wide">
+            &copy; {new Date().getFullYear()} ShaadiSetu Media Pvt. Ltd. — Made
+            with care in India.
+          </p>
         </div>
       </div>
     </footer>

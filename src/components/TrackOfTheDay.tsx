@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useBackdropTone } from "@/hooks/useBackdropTone";
 
 // Royalty-free instrumental ambient — swap freely. Cached by the browser
 // after first play. Each track has a sourced cover credit.
@@ -38,34 +39,36 @@ function pickDailyTrack() {
   return TRACKS[day % TRACKS.length];
 }
 
+// Lazy initialiser — read persisted state once at first client render so we
+// don't trigger a cascading re-render from inside an effect.
+function loadEnabled(): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    return window.localStorage.getItem(STORAGE_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
 export default function TrackOfTheDay() {
-  const [mounted, setMounted] = useState(false);
-  const [enabled, setEnabled] = useState(false);
+  const [enabled, setEnabled] = useState<boolean>(loadEnabled);
   const [expanded, setExpanded] = useState(false);
   const [playing, setPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const pillRef = useRef<HTMLButtonElement | null>(null);
   const track = pickDailyTrack();
+  // Sample the page behind the pill. When the expanded card is open, the
+  // panel has its own background so we can stop sampling and freeze the tone.
+  const backdrop = useBackdropTone(pillRef, !(enabled && expanded));
 
-  // Hydrate from localStorage
+  // Persist enabled state and pause the audio when disabled. onPause on the
+  // <audio> element flips `playing` back to false — no setState here.
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored === "1") setEnabled(true);
-    } catch {}
-    setMounted(true);
-  }, []);
-
-  // Persist enabled state
-  useEffect(() => {
-    if (!mounted) return;
     try {
       localStorage.setItem(STORAGE_KEY, enabled ? "1" : "0");
     } catch {}
-    if (!enabled && audioRef.current) {
-      audioRef.current.pause();
-      setPlaying(false);
-    }
-  }, [enabled, mounted]);
+    if (!enabled) audioRef.current?.pause();
+  }, [enabled]);
 
   const togglePlay = () => {
     const a = audioRef.current;
@@ -80,10 +83,11 @@ export default function TrackOfTheDay() {
     }
   };
 
-  if (!mounted) return null;
-
   return (
-    <div className="fixed bottom-5 left-5 z-40 select-none">
+    <div
+      style={{ bottom: "max(1.25rem, env(safe-area-inset-bottom, 0px))" }}
+      className="fixed left-5 z-40 select-none"
+    >
       <audio
         ref={audioRef}
         src={track.src}
@@ -145,8 +149,9 @@ export default function TrackOfTheDay() {
         </div>
       )}
 
-      {/* Toggle pill */}
+      {/* Toggle pill — adaptive contrast against the page behind it */}
       <button
+        ref={pillRef}
         onClick={() => {
           if (!enabled) {
             setEnabled(true);
@@ -156,21 +161,31 @@ export default function TrackOfTheDay() {
           }
         }}
         aria-label={enabled ? "Music player" : "Enable music"}
-        className={`group flex items-center gap-2 pl-2 pr-3 py-2 border transition-all ${
+        className={`group flex items-center gap-2 pl-2 pr-3 py-2 border transition-colors duration-300 ${
           enabled
-            ? "bg-ink border-ink text-cream hover:bg-bordeaux"
-            : "bg-cream border-ink/20 text-ink hover:border-ink"
+            ? backdrop === "dark"
+              ? "bg-cream border-cream text-ink hover:bg-champagne"
+              : "bg-ink border-ink text-cream hover:bg-bordeaux"
+            : backdrop === "dark"
+              ? "bg-cream/95 border-cream/40 text-ink hover:bg-cream"
+              : "bg-cream border-ink/20 text-ink hover:border-ink"
         }`}
       >
         <span
-          className={`w-7 h-7 flex items-center justify-center ${
-            enabled ? "bg-champagne text-ink" : "bg-ink text-cream"
+          className={`w-7 h-7 flex items-center justify-center transition-colors duration-300 ${
+            enabled
+              ? backdrop === "dark"
+                ? "bg-bordeaux text-cream"
+                : "bg-champagne text-ink"
+              : backdrop === "dark"
+                ? "bg-bordeaux text-cream"
+                : "bg-ink text-cream"
           }`}
         >
-          {enabled && playing ? <SoundOnAnimated /> : enabled ? <SoundOnIcon /> : <SoundOffIcon />}
+          {enabled && playing ? <SoundOnAnimated /> : <MusicNoteIcon />}
         </span>
         <span className="text-[0.62rem] uppercase tracking-[0.22em] font-medium">
-          {enabled ? (playing ? "Playing" : "Music") : "Sound"}
+          {enabled ? (playing ? "Playing" : "Music") : "Music"}
         </span>
       </button>
     </div>
@@ -191,19 +206,21 @@ function PauseIcon() {
     </svg>
   );
 }
-function SoundOnIcon() {
+function MusicNoteIcon() {
   return (
-    <svg viewBox="0 0 24 24" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M11 5L6 9H2v6h4l5 4V5z" />
-      <path d="M19 12a7 7 0 0 0-3-5.7M16 8a3 3 0 0 1 0 8" />
-    </svg>
-  );
-}
-function SoundOffIcon() {
-  return (
-    <svg viewBox="0 0 24 24" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M11 5L6 9H2v6h4l5 4V5z" />
-      <path d="M22 9l-6 6M16 9l6 6" />
+    <svg
+      viewBox="0 0 24 24"
+      className="w-3.5 h-3.5"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      {/* Two-bar music note — the universal "music" glyph */}
+      <path d="M9 18V5l12-2v13" />
+      <circle cx="6" cy="18" r="3" fill="currentColor" stroke="none" />
+      <circle cx="18" cy="16" r="3" fill="currentColor" stroke="none" />
     </svg>
   );
 }
