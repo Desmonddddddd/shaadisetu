@@ -1,0 +1,145 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model City {
+  id        String   @id @default(cuid())
+  name      String
+  state     String
+  slug      String   @unique
+  vendors   Vendor[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Category {
+  id            String        @id
+  name          String
+  emoji         String
+  description   String
+  vendors       Vendor[]
+  subcategories Subcategory[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model Subcategory {
+  id         String   @id
+  name       String
+  group      String?
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Vendor {
+  id              String           @id
+  name            String
+  description     String
+  cityId          String
+  city            City             @relation(fields: [cityId], references: [id])
+  categoryId      String
+  category        Category         @relation(fields: [categoryId], references: [id])
+  rating          Float
+  reviewCount     Int
+  priceRange      String
+  yearsExperience Int
+  verified        Boolean          @default(false)
+  tags            String           // JSON-encoded array (SQLite has no native array)
+  packages        Package[]
+  portfolio       PortfolioImage[]
+  reviews         Review[]
+  bookedDates     BookedDate[]
+  stats           VendorStats?
+  enquiries       Enquiry[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  @@index([cityId, categoryId])
+}
+
+model Package {
+  id        String   @id @default(cuid())
+  vendor    Vendor   @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+  vendorId  String
+  tier      String
+  name      String
+  price     Int
+  features  String   // JSON-encoded array
+  popular   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([vendorId])
+}
+
+model PortfolioImage {
+  id        String   @id
+  vendor    Vendor   @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+  vendorId  String
+  url       String
+  caption   String
+  eventType String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([vendorId])
+}
+
+model Review {
+  id        String   @id
+  vendor    Vendor   @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+  vendorId  String
+  author    String
+  rating    Int
+  date      String
+  title     String
+  body      String
+  eventType String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([vendorId])
+}
+
+model BookedDate {
+  vendor    Vendor   @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+  vendorId  String
+  date      String
+  createdAt DateTime @default(now())
+
+  @@id([vendorId, date])
+}
+
+model VendorStats {
+  vendor            Vendor   @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+  vendorId          String   @id
+  weddingsCompleted Int
+  customersServed   Int
+  responseTime      String
+  yearsExperience   Int
+  updatedAt         DateTime @updatedAt
+}
+
+model Enquiry {
+  id           String   @id @default(cuid())
+  vendor       Vendor   @relation(fields: [vendorId], references: [id])
+  vendorId     String
+  name         String
+  phone        String
+  eventDate    String
+  eventType    String
+  requirements String
+  status       String   @default("new")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([vendorId, createdAt])
+}
