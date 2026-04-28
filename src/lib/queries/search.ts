@@ -79,7 +79,10 @@ export async function searchVendors(params: SearchParams): Promise<Vendor[]> {
 
   const sql = `
     SELECT
-      v.*,
+      v."id", v."name", v."description", v."cityId", v."categoryId",
+      v."rating", v."reviewCount", v."priceRange", v."yearsExperience",
+      v."verified", v."tags", v."email", v."moderationState",
+      v."createdAt", v."updatedAt",
       c."name" AS "cityName",
       ${rankExpr} AS "rank"
     FROM "Vendor" v
