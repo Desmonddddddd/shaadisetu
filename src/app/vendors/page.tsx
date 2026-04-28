@@ -60,7 +60,7 @@ export default async function VendorsPage({
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-ink/70 via-ink/50 to-ink/85" />
-        <div className="relative max-w-5xl mx-auto px-6 py-24 md:py-32 text-center">
+        <div className="relative max-w-5xl mx-auto px-6 py-14 md:py-20 text-center">
           <div className="flex items-center justify-center gap-3 mb-6 fade-up">
             <span className="block w-12 h-px bg-champagne" />
             <p className="text-[0.7rem] font-semibold uppercase tracking-[0.32em] text-champagne">
@@ -68,18 +68,17 @@ export default async function VendorsPage({
             </p>
             <span className="block w-12 h-px bg-champagne" />
           </div>
-          <h1 className="fade-up stagger-1 font-serif-display text-5xl md:text-7xl text-cream leading-[1.05]">
+          <h1 className="fade-up stagger-1 font-serif-display text-4xl md:text-6xl text-cream leading-[1.05]">
             Find your <span className="italic text-champagne">people.</span>
           </h1>
-          <p className="fade-up stagger-2 mt-6 text-cream/80 max-w-xl mx-auto leading-relaxed font-light">
+          <p className="fade-up stagger-2 mt-4 text-cream/80 max-w-xl mx-auto leading-relaxed font-light text-sm md:text-base">
             A hand-vetted directory of India&apos;s finest wedding artisans.
-            Filter by city, refine by category, search by anything that matters.
           </p>
         </div>
       </section>
 
       {/* CONTROLS */}
-      <section className="py-12 md:py-16 border-b border-ink/10">
+      <section className="py-8 md:py-10 border-b border-ink/10">
         <div className="max-w-6xl mx-auto px-6">
           <Suspense fallback={<ControlsSkeleton />}>
             <VendorsControls
@@ -95,7 +94,7 @@ export default async function VendorsPage({
       </section>
 
       {/* GRID */}
-      <section className="py-16 md:py-24">
+      <section className="py-10 md:py-14">
         <div className="max-w-6xl mx-auto px-6">
           <RevealOnScroll>
             <VendorEditorialGrid
