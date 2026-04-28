@@ -39,6 +39,7 @@ async function wipe() {
   await prisma.review.deleteMany();
   await prisma.portfolioImage.deleteMany();
   await prisma.package.deleteMany();
+  await prisma.vendorAccount.deleteMany();
   await prisma.vendor.deleteMany();
   await prisma.subcategory.deleteMany();
   await prisma.category.deleteMany();
@@ -122,6 +123,8 @@ async function main() {
       yearsExperience: v.yearsExperience,
       verified: v.verified,
       tags: JSON.stringify(v.tags),
+      email: `${v.id}@vendors.shaadisetu.test`,
+      moderationState: "live",
     })),
   });
   console.log(`[seed] vendors: ${sampleVendors.length}`);

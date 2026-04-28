@@ -52,17 +52,31 @@ model Vendor {
   priceRange      String
   yearsExperience Int
   verified        Boolean          @default(false)
-  tags            String           // JSON-encoded array (SQLite has no native array)
+  tags            String
+  email           String?          @unique
+  moderationState String           @default("live")
   packages        Package[]
   portfolio       PortfolioImage[]
   reviews         Review[]
   bookedDates     BookedDate[]
   stats           VendorStats?
   enquiries       Enquiry[]
+  account         VendorAccount?
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
 
   @@index([cityId, categoryId])
+}
+
+model VendorAccount {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  vendorId     String?  @unique
+  vendor       Vendor?  @relation(fields: [vendorId], references: [id])
+  status       String   @default("pending")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
 model Package {
@@ -129,17 +143,18 @@ model VendorStats {
 }
 
 model Enquiry {
-  id           String   @id @default(cuid())
-  vendor       Vendor   @relation(fields: [vendorId], references: [id])
+  id           String    @id @default(cuid())
+  vendor       Vendor    @relation(fields: [vendorId], references: [id])
   vendorId     String
   name         String
   phone        String
   eventDate    String
   eventType    String
   requirements String
-  status       String   @default("new")
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  status       String    @default("new")
+  readAt       DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 
   @@index([vendorId, createdAt])
 }

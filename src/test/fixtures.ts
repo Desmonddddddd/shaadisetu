@@ -15,6 +15,8 @@ export function makeVendor(overrides: Partial<Vendor> = {}): Vendor {
     yearsExperience: 5,
     verified: true,
     tags: ["candid", "cinematic"],
+    email: null,
+    moderationState: "live",
     createdAt: now,
     updatedAt: now,
     ...overrides,

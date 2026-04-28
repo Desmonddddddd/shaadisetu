@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { enquirySchema } from "@/lib/validators";
 import { createEnquiry } from "@/lib/queries/enquiries";
 import { Prisma } from "@/generated/prisma";
+import { db } from "@/lib/db";
+import { sendNewEnquiryEmail } from "@/lib/email";
 
 export async function POST(request: Request) {
   let body: unknown;
@@ -19,6 +21,15 @@ export async function POST(request: Request) {
   }
   try {
     const { id } = await createEnquiry(parsed.data);
+    db.vendor
+      .findUnique({
+        where: { id: parsed.data.vendorId },
+        select: { email: true, name: true },
+      })
+      .then((vendor) => {
+        if (vendor) return sendNewEnquiryEmail(vendor, parsed.data);
+      })
+      .catch((e) => console.error("[enquiries.email]", e));
     return NextResponse.json({ ok: true, id }, { status: 201 });
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2003") {
