@@ -41,3 +41,51 @@ export async function sendNewEnquiryEmail(
   `;
   await c.emails.send({ from: FROM, to: vendor.email, subject, html });
 }
+
+export interface CuratedRequestEmailInput {
+  name: string;
+  email: string;
+  phone?: string;
+  message: string;
+}
+
+const CURATED_INBOX = process.env.CURATED_INBOX ?? "hello@shaadisetu.com";
+
+export async function sendCuratedRequestEmail(
+  input: CuratedRequestEmailInput,
+): Promise<void> {
+  const c = client();
+  if (!c) return; // dev/test no-op when RESEND_API_KEY is unset
+
+  const subject = `Curated request from ${input.name}`;
+  const escape = (s: string) =>
+    s.replace(/[&<>"']/g, (ch) =>
+      ch === "&"
+        ? "&amp;"
+        : ch === "<"
+          ? "&lt;"
+          : ch === ">"
+            ? "&gt;"
+            : ch === "\""
+              ? "&quot;"
+              : "&#39;",
+    );
+  const html = `
+    <div style="font-family: -apple-system, sans-serif; max-width: 560px;">
+      <h2 style="color: #be185d;">New curated request</h2>
+      <p><strong>${escape(input.name)}</strong> sent a request from the footer.</p>
+      <ul style="line-height: 1.6;">
+        <li>Email: <a href="mailto:${escape(input.email)}">${escape(input.email)}</a></li>
+        <li>Phone: ${input.phone ? escape(input.phone) : "—"}</li>
+      </ul>
+      <p style="white-space: pre-wrap; border-left: 3px solid #be185d; padding-left: 12px; color: #333;">${escape(input.message)}</p>
+    </div>
+  `;
+  await c.emails.send({
+    from: FROM,
+    to: CURATED_INBOX,
+    replyTo: input.email,
+    subject,
+    html,
+  });
+}

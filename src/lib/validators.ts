@@ -31,3 +31,21 @@ export const enquirySchema = z.object({
 });
 
 export type EnquiryInput = z.infer<typeof enquirySchema>;
+
+export const curatedRequestSchema = z.object({
+  name: z.string().trim().min(2, "Name is too short").max(80),
+  email: z.string().trim().email("Enter a valid email").max(120),
+  phone: z
+    .string()
+    .trim()
+    .max(20)
+    .optional()
+    .or(z.literal("")),
+  message: z
+    .string()
+    .trim()
+    .min(10, "Tell us a bit more (min 10 chars)")
+    .max(2000, "Keep it under 2000 characters"),
+});
+
+export type CuratedRequestInput = z.infer<typeof curatedRequestSchema>;
