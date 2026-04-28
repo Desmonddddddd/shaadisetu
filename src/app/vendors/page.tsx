@@ -96,25 +96,21 @@ export default async function VendorsPage({
       {/* GRID */}
       <section className="py-10 md:py-14">
         <div className="max-w-6xl mx-auto px-6">
-          <RevealOnScroll>
-            <VendorEditorialGrid
-              vendors={vendors}
-              isAuthed={!!userSess}
-              savedVendorIds={savedVendorIds}
-            />
-          </RevealOnScroll>
+          <VendorEditorialGrid
+            vendors={vendors}
+            isAuthed={!!userSess}
+            savedVendorIds={savedVendorIds}
+          />
 
           {vendors.length > 0 && (
-            <RevealOnScroll delay={120}>
-              <div className="mt-20 text-center">
-                <SectionDivider />
-                <p className="mt-6 text-[0.7rem] uppercase tracking-[0.22em] text-ink-soft">
-                  Showing the {vendors.length} most relevant results.
-                  <br />
-                  Refine your filters above to narrow the field.
-                </p>
-              </div>
-            </RevealOnScroll>
+            <div className="mt-20 text-center">
+              <SectionDivider />
+              <p className="mt-6 text-[0.7rem] uppercase tracking-[0.22em] text-ink-soft">
+                Showing the {vendors.length} most relevant results.
+                <br />
+                Refine your filters above to narrow the field.
+              </p>
+            </div>
           )}
         </div>
       </section>
