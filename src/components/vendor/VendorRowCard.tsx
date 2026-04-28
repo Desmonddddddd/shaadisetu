@@ -35,7 +35,7 @@ export function VendorRowCard({ vendor }: Props) {
       <div className="flex flex-col items-end gap-2">
         <button
           type="button"
-          onClick={() => (inCompare ? remove(vendor.id) : add(vendor.id))}
+          onClick={() => (inCompare ? remove(vendor.id) : add({ id: vendor.id, name: vendor.name }))}
           aria-pressed={inCompare}
           className={`text-xs px-3 py-1 rounded-full border transition-colors ${
             inCompare

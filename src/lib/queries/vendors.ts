@@ -72,6 +72,33 @@ export async function getVendorsByIds(ids: string[]): Promise<Vendor[]> {
     .map(rowToVendor);
 }
 
+export async function getVendorProfilesByIds(ids: string[]): Promise<VendorWithProfile[]> {
+  if (ids.length === 0) return [];
+  const rows = await db.vendor.findMany({
+    where: { id: { in: ids } },
+    include: {
+      city: { select: { name: true } },
+      packages: { orderBy: { price: "asc" } },
+      portfolio: true,
+      reviews: { orderBy: { date: "desc" } },
+      bookedDates: { select: { date: true } },
+      stats: true,
+    },
+  });
+  const byId = new Map(rows.map((r) => [r.id, r]));
+  return ids
+    .map((id) => byId.get(id))
+    .filter((r): r is NonNullable<typeof r> => Boolean(r))
+    .map((row) => ({
+      ...rowToVendor(row),
+      packages: row.packages.map(rowToPackage) as Package[],
+      portfolio: row.portfolio,
+      reviews: row.reviews,
+      bookedDates: row.bookedDates,
+      stats: row.stats,
+    }));
+}
+
 export async function getCategoryVendorCounts(): Promise<Record<string, number>> {
   const grouped = await db.vendor.groupBy({
     by: ["categoryId"],

@@ -1,12 +1,14 @@
 "use client";
-import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import type { VendorPreview } from "@/types/vendor";
 
 const STORAGE_KEY = "shaadisetu.compare";
 const MAX = 3;
 
 interface Ctx {
+  items: VendorPreview[];
   ids: string[];
-  add: (id: string) => boolean;     // true if added; false if rejected (overflow or duplicate)
+  add: (preview: VendorPreview) => boolean;
   remove: (id: string) => void;
   clear: () => void;
   has: (id: string) => boolean;
@@ -14,57 +16,67 @@ interface Ctx {
 
 const CompareCtx = createContext<Ctx | null>(null);
 
-function safeRead(): string[] {
+function safeRead(): VendorPreview[] {
   try {
     const raw = typeof window !== "undefined" ? localStorage.getItem(STORAGE_KEY) : null;
     if (!raw) return [];
     const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed.filter((x): x is string => typeof x === "string") : [];
+    if (!Array.isArray(parsed)) return [];
+    return parsed
+      .map((x): VendorPreview | null => {
+        if (typeof x === "string") return { id: x, name: x };
+        if (x && typeof x === "object" && typeof x.id === "string" && typeof x.name === "string") {
+          return { id: x.id, name: x.name };
+        }
+        return null;
+      })
+      .filter((x): x is VendorPreview => x !== null);
   } catch {
     return [];
   }
 }
 
-function safeWrite(ids: string[]) {
+function safeWrite(items: VendorPreview[]) {
   try {
-    if (typeof window !== "undefined") localStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
+    if (typeof window !== "undefined") localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
   } catch {
     /* private mode etc. */
   }
 }
 
 export function CompareProvider({ children }: { children: ReactNode }) {
-  const [ids, setIds] = useState<string[]>([]);
+  const [items, setItems] = useState<VendorPreview[]>([]);
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
-    setIds(safeRead());
+    setItems(safeRead());
     setHydrated(true);
   }, []);
 
   useEffect(() => {
-    if (hydrated) safeWrite(ids);
-  }, [ids, hydrated]);
+    if (hydrated) safeWrite(items);
+  }, [items, hydrated]);
 
-  const add = useCallback((id: string): boolean => {
+  const add = useCallback((preview: VendorPreview): boolean => {
     let added = false;
-    setIds((curr) => {
-      if (curr.includes(id) || curr.length >= MAX) return curr;
+    setItems((curr) => {
+      if (curr.some((x) => x.id === preview.id) || curr.length >= MAX) return curr;
       added = true;
-      return [...curr, id];
+      return [...curr, preview];
     });
     return added;
   }, []);
 
   const remove = useCallback(
-    (id: string) => setIds((curr) => curr.filter((x) => x !== id)),
+    (id: string) => setItems((curr) => curr.filter((x) => x.id !== id)),
     [],
   );
-  const clear = useCallback(() => setIds([]), []);
-  const has = useCallback((id: string) => ids.includes(id), [ids]);
+  const clear = useCallback(() => setItems([]), []);
+  const has = useCallback((id: string) => items.some((x) => x.id === id), [items]);
+  const ids = useMemo(() => items.map((x) => x.id), [items]);
 
   return (
-    <CompareCtx.Provider value={{ ids, add, remove, clear, has }}>{children}</CompareCtx.Provider>
+    <CompareCtx.Provider value={{ items, ids, add, remove, clear, has }}>{children}</CompareCtx.Provider>
   );
 }
 
