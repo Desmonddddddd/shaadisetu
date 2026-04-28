@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 
 test("submit an enquiry and persist to localStorage", async ({ page }) => {
-  await page.goto("/vendors/v5");
+  await page.goto("/vendors/v/v5");
 
   await page.getByLabel(/Name/).fill("Priya");
   await page.getByLabel(/Phone/).fill("9876543210");

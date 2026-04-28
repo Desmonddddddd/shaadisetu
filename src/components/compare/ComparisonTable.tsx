@@ -56,7 +56,7 @@ export function ComparisonTable() {
       <div className="grid items-stretch gap-3 pt-4" style={{ gridTemplateColumns: cols }}>
         <div />
         {vendors.map((v) => (
-          <Link key={v.id} href={`/vendors/${v.id}`} className="text-center bg-shaadi-deep text-white py-2 rounded-lg text-sm">
+          <Link key={v.id} href={`/vendors/v/${v.id}`} className="text-center bg-shaadi-deep text-white py-2 rounded-lg text-sm">
             View profile & enquire
           </Link>
         ))}

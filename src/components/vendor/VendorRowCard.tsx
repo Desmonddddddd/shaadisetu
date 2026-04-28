@@ -16,7 +16,7 @@ export function VendorRowCard({ vendor, filterDate }: Props) {
 
   return (
     <article className="grid grid-cols-[80px_1fr_auto] gap-4 p-4 bg-white border border-gray-200 rounded-xl hover:shadow-md transition-shadow">
-      <Link href={`/vendors/${vendor.id}`} className="block">
+      <Link href={`/vendors/v/${vendor.id}`} className="block">
         <div
           className="w-20 h-20 rounded-lg bg-gradient-to-br from-shaadi-light to-shaadi-rose"
           aria-hidden
@@ -24,7 +24,7 @@ export function VendorRowCard({ vendor, filterDate }: Props) {
       </Link>
 
       <div className="min-w-0">
-        <Link href={`/vendors/${vendor.id}`} className="hover:underline">
+        <Link href={`/vendors/v/${vendor.id}`} className="hover:underline">
           <h3 className="font-semibold text-slate-900 truncate">{vendor.name}</h3>
         </Link>
         <p className="text-xs text-slate-500 truncate">{vendor.tags.join(" · ")}</p>
