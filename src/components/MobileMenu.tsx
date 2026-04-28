@@ -26,7 +26,7 @@ export default function MobileMenu() {
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 right-0 bg-white border-t border-gray-100 shadow-lg z-40 p-4 space-y-4">
+        <div className="absolute top-full left-0 right-0 bg-cream border-t border-ink/10 shadow-lg z-40 p-4 space-y-4">
           <div>
             <p className="text-xs font-semibold text-gray-500 uppercase mb-2">Select City</p>
             <CitySearch />
@@ -35,35 +35,35 @@ export default function MobileMenu() {
             <Link
               href="/about"
               onClick={() => setIsOpen(false)}
-              className="px-4 py-2 text-sm font-medium text-slate-700 hover:bg-rose-50 rounded-lg transition-colors"
+              className="px-4 py-2 text-sm font-medium text-slate-700 hover:bg-cream-soft rounded-lg transition-colors"
             >
               About Us
             </Link>
             <Link
               href="/vendors"
               onClick={() => setIsOpen(false)}
-              className="px-4 py-2 text-sm font-medium text-slate-700 hover:bg-rose-50 rounded-lg transition-colors"
+              className="px-4 py-2 text-sm font-medium text-slate-700 hover:bg-cream-soft rounded-lg transition-colors"
             >
               Vendors
             </Link>
             <Link
               href="/plan"
               onClick={() => setIsOpen(false)}
-              className="px-4 py-2 text-sm font-medium text-slate-700 hover:bg-rose-50 rounded-lg transition-colors"
+              className="px-4 py-2 text-sm font-medium text-slate-700 hover:bg-cream-soft rounded-lg transition-colors"
             >
               Planning Tools
             </Link>
             <Link
               href="/functions"
               onClick={() => setIsOpen(false)}
-              className="px-4 py-2 text-sm font-medium text-slate-700 hover:bg-rose-50 rounded-lg transition-colors"
+              className="px-4 py-2 text-sm font-medium text-slate-700 hover:bg-cream-soft rounded-lg transition-colors"
             >
               Functions
             </Link>
             <Link
               href="/client-diaries"
               onClick={() => setIsOpen(false)}
-              className="px-4 py-2 text-sm font-medium text-slate-700 hover:bg-rose-50 rounded-lg transition-colors"
+              className="px-4 py-2 text-sm font-medium text-slate-700 hover:bg-cream-soft rounded-lg transition-colors"
             >
               Client Diaries
             </Link>
@@ -71,16 +71,16 @@ export default function MobileMenu() {
           <Link
             href="/membership"
             onClick={() => setIsOpen(false)}
-            className="block w-full py-2.5 text-sm font-semibold text-amber-700 text-center rounded-lg border border-amber-300 bg-amber-50 hover:bg-amber-100 transition-colors"
+            className="block w-full py-2.5 text-[0.72rem] font-semibold tracking-[0.18em] uppercase text-bordeaux text-center border border-champagne hover:bg-champagne/15 transition-colors"
           >
             Become Pro
           </Link>
           <Link
-            href="/signup"
+            href="/account/signup"
             onClick={() => setIsOpen(false)}
-            className="block w-full py-2.5 text-sm font-semibold text-white text-center rounded-lg bg-gradient-to-r from-shaadi-red via-shaadi-rose to-shaadi-pink hover:opacity-90 transition-opacity"
+            className="block w-full py-2.5 text-[0.72rem] font-semibold tracking-[0.18em] uppercase text-cream text-center bg-ink hover:bg-bordeaux transition-colors"
           >
-            Sign Up
+            Join
           </Link>
         </div>
       )}

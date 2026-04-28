@@ -16,27 +16,30 @@ export function VendorProfileHero({
 }: Props) {
   return (
     <header
-      className="relative overflow-hidden bg-gradient-to-br from-shaadi-light via-shaadi-rose to-shaadi-deep text-white p-6 rounded-2xl"
+      className="relative overflow-hidden text-cream p-12 md:p-16 min-h-[340px] flex items-end"
       style={
         vendor.coverImage
           ? {
-              backgroundImage: `linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.65)), url("${vendor.coverImage}")`,
+              backgroundImage: `linear-gradient(rgba(26,26,26,0.55), rgba(26,26,26,0.85)), url("${vendor.coverImage}")`,
               backgroundSize: "cover",
               backgroundPosition: "center",
             }
-          : undefined
+          : {
+              backgroundImage: `linear-gradient(135deg, #4a1620 0%, #6b1f2a 60%, #1a1a1a 100%)`,
+            }
       }
     >
-      <div className="relative flex items-start justify-between gap-4">
+      <div className="relative flex items-end justify-between gap-6 w-full">
         <div>
-          <h1 className="text-2xl font-semibold">
-            {vendor.name}{" "}
-            {vendor.verified && (
-              <span className="text-xs bg-white/20 px-2 py-0.5 rounded-full ml-1">✓ Verified</span>
-            )}
+          <p className="text-[0.7rem] font-semibold tracking-[0.28em] uppercase text-champagne mb-3">
+            {vendor.verified ? "✓ Verified Atelier" : "Featured Vendor"}
+          </p>
+          <h1 className="font-serif-display text-4xl md:text-5xl lg:text-6xl leading-[1.05]">
+            {vendor.name}
           </h1>
-          <p className="text-sm opacity-90">
-            ⭐ {vendor.rating} ({vendor.reviewCount}) · {vendor.city.name} · {vendor.yearsExperience} yrs
+          <span className="block w-16 h-px bg-champagne mt-4" />
+          <p className="text-sm opacity-80 mt-4 tracking-wide">
+            ★ {vendor.rating} · {vendor.reviewCount} reviews · {vendor.city.name} · {vendor.yearsExperience} years
           </p>
         </div>
         <div className="shrink-0">
@@ -50,7 +53,7 @@ export function VendorProfileHero({
         </div>
       </div>
       {stats && (
-        <div className="grid grid-cols-3 gap-3 mt-4">
+        <div className="relative grid grid-cols-3 gap-px bg-champagne/30 mt-8">
           <Stat label="Weddings" value={stats.weddingsCompleted.toLocaleString()} />
           <Stat label="Customers" value={stats.customersServed.toLocaleString()} />
           <Stat label="Response" value={stats.responseTime} />
@@ -62,9 +65,9 @@ export function VendorProfileHero({
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="bg-white/15 rounded-lg px-3 py-2">
-      <div className="text-xs uppercase opacity-80">{label}</div>
-      <div className="font-semibold">{value}</div>
+    <div className="bg-ink/40 backdrop-blur-sm px-5 py-4">
+      <div className="font-serif-display text-2xl text-champagne">{value}</div>
+      <div className="text-[0.65rem] uppercase tracking-[0.22em] text-cream/70 mt-1">{label}</div>
     </div>
   );
 }

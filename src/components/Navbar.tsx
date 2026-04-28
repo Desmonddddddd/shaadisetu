@@ -16,32 +16,35 @@ export default function Navbar() {
 
   return (
     <header
-      className={`sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b transition-shadow duration-300 ${
-        scrolled ? "border-gray-100 shadow-sm" : "border-transparent"
+      className={`sticky top-0 z-50 backdrop-blur-md transition-all duration-300 ${
+        scrolled
+          ? "bg-cream/95 border-b border-ink/10 shadow-[0_1px_0_0_rgba(201,168,106,0.4)]"
+          : "bg-cream/80 border-b border-transparent"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center h-16">
+        <div className="flex items-center h-20">
           {/* Logo */}
-          <Link href="/" className="flex-shrink-0 mr-auto">
-            <span className="text-2xl font-bold font-[family-name:var(--font-cormorant)] bg-gradient-to-r from-shaadi-red via-shaadi-rose to-shaadi-pink bg-clip-text text-transparent">
-              ShaadiSetu
+          <Link href="/" className="flex-shrink-0 mr-auto group">
+            <span className="font-serif-display text-3xl tracking-tight text-ink">
+              Shaadi<span className="text-bordeaux">Setu</span>
             </span>
+            <span className="block h-px w-0 group-hover:w-full bg-champagne transition-all duration-500" />
           </Link>
 
           {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-6">
+          <nav className="hidden md:flex items-center gap-8">
             {[
-              { label: "About Us", href: "/about" },
+              { label: "About", href: "/about" },
               { label: "Vendors", href: "/vendors" },
-              { label: "Planning Tools", href: "/plan" },
+              { label: "Planning", href: "/plan" },
               { label: "Functions", href: "/functions" },
-              { label: "Client Diaries", href: "/client-diaries" },
+              { label: "Diaries", href: "/client-diaries" },
             ].map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="link-underline text-sm font-medium text-slate-600 hover:text-shaadi-red transition-colors"
+                className="editorial-link text-[0.78rem] font-medium tracking-[0.18em] uppercase text-ink-soft hover:text-ink transition-colors"
               >
                 {link.label}
               </Link>
@@ -49,21 +52,25 @@ export default function Navbar() {
           </nav>
 
           {/* Desktop right */}
-          <div className="hidden md:flex items-center gap-3 ml-auto pl-6">
+          <div className="hidden md:flex items-center gap-4 ml-auto pl-8">
             <Link
               href="/membership"
-              className="px-4 py-1.5 text-sm font-semibold text-amber-700 border border-amber-300 bg-amber-50 rounded-full hover:bg-amber-100 transition-colors"
+              className="text-[0.7rem] font-semibold tracking-[0.18em] uppercase text-bordeaux hover:text-ink transition-colors"
             >
-              Become Pro
+              Pro
+            </Link>
+            <span className="block w-px h-5 bg-ink/15" />
+            <Link
+              href="/account/login"
+              className="text-[0.7rem] font-semibold tracking-[0.18em] uppercase text-ink-soft hover:text-bordeaux transition-colors"
+            >
+              Sign In
             </Link>
             <Link
-              href="/signup"
-              className="w-9 h-9 flex items-center justify-center rounded-full bg-gradient-to-r from-shaadi-red via-shaadi-rose to-shaadi-pink hover:opacity-90 transition-opacity shadow-sm"
-              aria-label="Sign up"
+              href="/account/signup"
+              className="btn-editorial text-[0.7rem]"
             >
-              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-              </svg>
+              Join
             </Link>
           </div>
 

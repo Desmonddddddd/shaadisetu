@@ -15,32 +15,39 @@ export function VendorRowCard({ vendor, isAuthed = false, initialSaved = false }
   const inCompare = has(vendor.id);
 
   return (
-    <article className="grid grid-cols-[80px_1fr_auto] gap-4 p-4 bg-white border border-gray-200 rounded-xl hover:shadow-md transition-shadow">
+    <article className="editorial-card grid grid-cols-[110px_1fr_auto] gap-5 p-5">
       <Link href={`/vendors/v/${vendor.id}`} className="block">
         {vendor.coverImage ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={vendor.coverImage}
             alt={vendor.name}
-            className="w-20 h-20 rounded-lg object-cover"
+            className="w-[110px] h-[110px] object-cover"
           />
         ) : (
           <div
-            className="w-20 h-20 rounded-lg bg-gradient-to-br from-shaadi-light to-shaadi-rose"
+            className="w-[110px] h-[110px] bg-gradient-to-br from-cream-soft to-blush"
             aria-hidden
           />
         )}
       </Link>
 
-      <div className="min-w-0">
-        <Link href={`/vendors/v/${vendor.id}`} className="hover:underline">
-          <h3 className="font-semibold text-slate-900 truncate">{vendor.name}</h3>
+      <div className="min-w-0 flex flex-col justify-center">
+        <Link href={`/vendors/v/${vendor.id}`}>
+          <h3 className="font-serif-display text-xl text-ink hover:text-bordeaux transition-colors truncate">
+            {vendor.name}
+          </h3>
         </Link>
-        <p className="text-xs text-slate-500 truncate">{vendor.tags.join(" · ")}</p>
-        <p className="text-sm text-shaadi-deep mt-1">
-          <span>⭐ {vendor.rating} ({vendor.reviewCount})</span>
-          <span> · </span>
-          <span>{vendor.priceRange}</span>
+        <span className="block w-6 h-px bg-champagne my-2" />
+        <p className="text-[0.7rem] uppercase tracking-[0.18em] text-ink-soft/70 truncate">
+          {vendor.tags.join(" · ")}
+        </p>
+        <p className="text-sm text-ink-soft mt-2 flex items-center gap-3">
+          <span className="text-bordeaux">★ {vendor.rating}</span>
+          <span className="text-ink-soft/30">|</span>
+          <span>{vendor.reviewCount} reviews</span>
+          <span className="text-ink-soft/30">|</span>
+          <span className="font-medium">{vendor.priceRange}</span>
         </p>
       </div>
 
@@ -55,13 +62,13 @@ export function VendorRowCard({ vendor, isAuthed = false, initialSaved = false }
           type="button"
           onClick={() => (inCompare ? remove(vendor.id) : add({ id: vendor.id, name: vendor.name }))}
           aria-pressed={inCompare}
-          className={`text-xs px-3 py-1 rounded-full border transition-colors ${
+          className={`text-[0.65rem] uppercase tracking-[0.18em] px-3 py-1.5 border transition-colors ${
             inCompare
-              ? "bg-shaadi-deep text-white border-shaadi-deep"
-              : "border-gray-300 text-slate-700 hover:border-shaadi-deep hover:text-shaadi-deep"
+              ? "bg-ink text-cream border-ink"
+              : "border-ink/20 text-ink-soft hover:border-bordeaux hover:text-bordeaux"
           }`}
         >
-          {inCompare ? "✓ Comparing" : "+ Compare"}
+          {inCompare ? "✓ Compare" : "Compare"}
         </button>
       </div>
     </article>

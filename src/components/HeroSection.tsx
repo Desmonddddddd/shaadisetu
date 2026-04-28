@@ -24,34 +24,41 @@ export default function HeroSection() {
 
   return (
     <section className="relative overflow-hidden">
-      {/* Gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-shaadi-deep via-shaadi-red to-shaadi-rose" />
-
-      {/* Subtle radial glow */}
+      {/* Full-bleed photo */}
       <div
-        className="absolute inset-0 opacity-30"
+        className="absolute inset-0 bg-cover bg-center"
         style={{
-          background: "radial-gradient(ellipse at 30% 20%, rgba(255,255,255,0.15) 0%, transparent 60%), radial-gradient(ellipse at 70% 80%, rgba(251,113,133,0.2) 0%, transparent 50%)",
+          backgroundImage:
+            "url('https://images.unsplash.com/photo-1519741497674-611481863552?w=2400&q=80')",
         }}
       />
+      {/* Editorial darkening */}
+      <div className="absolute inset-0 bg-gradient-to-b from-ink/70 via-ink/55 to-ink/85" />
+      {/* Top vignette */}
+      <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-ink/40 to-transparent" />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 md:py-44">
         <div className="text-center">
           {/* Eyebrow */}
-          <p className="hero-animate hero-delay-1 text-xs font-semibold uppercase tracking-[0.2em] text-rose-200 mb-4">
-            India&apos;s #1 Wedding Platform
-          </p>
+          <div className="hero-animate hero-delay-1 flex items-center justify-center gap-3 mb-8">
+            <span className="block w-12 h-px bg-champagne" />
+            <p className="text-[0.7rem] font-semibold uppercase tracking-[0.32em] text-champagne">
+              India&apos;s Editorial Wedding Platform
+            </p>
+            <span className="block w-12 h-px bg-champagne" />
+          </div>
 
           {/* Heading — serif */}
-          <h1 className="hero-animate hero-delay-2 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold font-[family-name:var(--font-cormorant)] text-white leading-[1.1]">
+          <h1 className="hero-animate hero-delay-2 font-serif-display text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] text-cream leading-[1.05]">
             Shaadi Ki Har Zaroorat,
             <br />
-            <span className="italic text-rose-100">Ek Hi Jagah</span>
+            <span className="italic text-champagne">Ek Hi Jagah.</span>
           </h1>
 
           {/* Subtitle */}
-          <p className="hero-animate hero-delay-3 mt-5 text-base md:text-lg text-rose-100/90 max-w-2xl mx-auto leading-relaxed">
-            Discover the best wedding vendors, venues, and services across India.
+          <p className="hero-animate hero-delay-3 mt-8 text-base md:text-lg text-cream/80 max-w-xl mx-auto leading-relaxed font-light tracking-wide">
+            A curated marketplace of India&apos;s finest wedding artisans, venues,
+            and storytellers — assembled with intention.
           </p>
 
           {/* Search bar */}
@@ -90,7 +97,7 @@ export default function HeroSection() {
               </select>
 
               {/* Search button */}
-              <button className="btn-arrow px-8 py-3 text-sm font-semibold text-white rounded-xl bg-gradient-to-r from-shaadi-red to-shaadi-rose hover:from-shaadi-deep hover:to-shaadi-red transition-all shadow-sm whitespace-nowrap flex items-center justify-center gap-2">
+              <button className="btn-arrow px-8 py-3 text-[0.78rem] font-semibold tracking-[0.18em] uppercase text-cream rounded-xl bg-ink hover:bg-bordeaux transition-all whitespace-nowrap flex items-center justify-center gap-2">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
@@ -100,18 +107,20 @@ export default function HeroSection() {
           </div>
 
           {/* Stats with dividers — count-up animation */}
-          <div className="hero-animate hero-delay-5 mt-12 flex flex-wrap justify-center gap-8 md:gap-12 text-white/90">
-            <div ref={vendorRef} className="text-center stat-divider px-4">
-              <p className="text-3xl md:text-4xl font-bold font-[family-name:var(--font-cormorant)] tabular-nums">{vendorCount}</p>
-              <p className="text-xs uppercase tracking-wider text-rose-200 mt-1">Verified Vendors</p>
+          <div className="hero-animate hero-delay-5 mt-16 flex flex-wrap justify-center items-center gap-x-12 gap-y-6 text-cream/90">
+            <div ref={vendorRef} className="text-center px-4">
+              <p className="font-serif-display text-4xl md:text-5xl text-champagne tabular-nums">{vendorCount}</p>
+              <p className="text-[0.65rem] uppercase tracking-[0.28em] text-cream/60 mt-2">Verified Vendors</p>
             </div>
-            <div ref={cityRef} className="text-center stat-divider px-4">
-              <p className="text-3xl md:text-4xl font-bold font-[family-name:var(--font-cormorant)] tabular-nums">{cityCount}</p>
-              <p className="text-xs uppercase tracking-wider text-rose-200 mt-1">Cities Covered</p>
+            <span className="hidden md:block w-px h-10 bg-champagne/40" />
+            <div ref={cityRef} className="text-center px-4">
+              <p className="font-serif-display text-4xl md:text-5xl text-champagne tabular-nums">{cityCount}</p>
+              <p className="text-[0.65rem] uppercase tracking-[0.28em] text-cream/60 mt-2">Cities Covered</p>
             </div>
+            <span className="hidden md:block w-px h-10 bg-champagne/40" />
             <div ref={coupleRef} className="text-center px-4">
-              <p className="text-3xl md:text-4xl font-bold font-[family-name:var(--font-cormorant)] tabular-nums">{coupleCount}</p>
-              <p className="text-xs uppercase tracking-wider text-rose-200 mt-1">Happy Couples</p>
+              <p className="font-serif-display text-4xl md:text-5xl text-champagne tabular-nums">{coupleCount}</p>
+              <p className="text-[0.65rem] uppercase tracking-[0.28em] text-cream/60 mt-2">Happy Couples</p>
             </div>
           </div>
         </div>

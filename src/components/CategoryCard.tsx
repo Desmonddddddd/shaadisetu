@@ -5,28 +5,25 @@ export default function CategoryCard({ category }: { category: Category }) {
   return (
     <Link
       href={`/categories/${category.id}`}
-      className={`group p-6 bg-white rounded-xl border shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 text-left w-full block ${
-        category.highlight
-          ? "border-amber-200 hover:border-amber-300"
-          : "border-gray-100 hover:border-shaadi-pink"
-      }`}
+      className="group editorial-card p-8 text-left w-full block relative"
     >
-      <div className="flex items-start justify-between">
-        <div className="text-4xl mb-3">{category.emoji}</div>
+      <div className="flex items-start justify-between mb-6">
+        <span className="text-3xl opacity-70 group-hover:opacity-100 transition-opacity">{category.emoji}</span>
         {category.highlight && (
-          <span className="text-[10px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full uppercase">
-            {category.highlight}
+          <span className="text-[0.6rem] font-semibold tracking-[0.2em] uppercase text-bordeaux">
+            · {category.highlight} ·
           </span>
         )}
       </div>
-      <h3 className="text-lg font-semibold text-slate-800 group-hover:text-shaadi-red transition-colors">
+      <h3 className="font-serif-display text-2xl text-ink group-hover:text-bordeaux transition-colors leading-tight">
         {category.name}
       </h3>
-      <p className="mt-1 text-sm text-gray-500 leading-relaxed">
+      <span className="block w-8 h-px bg-champagne mt-3 group-hover:w-16 transition-all duration-500" />
+      <p className="mt-4 text-sm text-ink-soft leading-relaxed font-light">
         {category.description}
       </p>
-      <p className="mt-2 text-xs text-slate-400">
-        {category.subcategories.length} subcategories
+      <p className="mt-6 text-[0.65rem] uppercase tracking-[0.22em] text-ink-soft/60">
+        {category.subcategories.length} Subcategories
       </p>
     </Link>
   );
