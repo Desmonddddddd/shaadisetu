@@ -31,141 +31,138 @@ function buildCitySlugs(): Map<string, string> {
   return out;
 }
 
-async function seedCities(slugs: Map<string, string>) {
-  console.log(`[seed] cities: ${cities.length}`);
-  for (const c of cities) {
-    const slug = slugs.get(`${c.name}|${c.state}`)!;
-    await prisma.city.upsert({
-      where: { slug },
-      update: { name: c.name, state: c.state },
-      create: { slug, name: c.name, state: c.state },
-    });
-  }
+async function wipe() {
+  // Order matters: children first.
+  await prisma.enquiry.deleteMany();
+  await prisma.bookedDate.deleteMany();
+  await prisma.vendorStats.deleteMany();
+  await prisma.review.deleteMany();
+  await prisma.portfolioImage.deleteMany();
+  await prisma.package.deleteMany();
+  await prisma.vendor.deleteMany();
+  await prisma.subcategory.deleteMany();
+  await prisma.category.deleteMany();
+  await prisma.city.deleteMany();
 }
 
-async function seedCategories() {
-  console.log(`[seed] categories: ${categories.length}`);
-  for (const cat of categories) {
-    await prisma.category.upsert({
-      where: { id: cat.id },
-      update: { name: cat.name, emoji: cat.emoji, description: cat.description },
-      create: { id: cat.id, name: cat.name, emoji: cat.emoji, description: cat.description },
-    });
-    for (const sub of cat.subcategories) {
-      await prisma.subcategory.upsert({
-        where: { id: sub.id },
-        update: { name: sub.name, group: sub.group ?? null, categoryId: cat.id },
-        create: { id: sub.id, name: sub.name, group: sub.group ?? null, categoryId: cat.id },
-      });
-    }
-  }
-}
+async function main() {
+  console.time("[seed] total");
+  await wipe();
 
-async function seedVendors() {
-  console.log(`[seed] vendors: ${sampleVendors.length}`);
-  let skipped = 0;
+  const slugs = buildCitySlugs();
+
+  // Cities — bulk
+  const cityRows = cities.map((c) => ({
+    name: c.name,
+    state: c.state,
+    slug: slugs.get(`${c.name}|${c.state}`)!,
+  }));
+  await prisma.city.createMany({ data: cityRows });
+  const cityByKey = new Map(
+    (await prisma.city.findMany({ select: { id: true, name: true, state: true } })).map(
+      (c) => [`${c.name}|${c.state}`, c.id],
+    ),
+  );
+  console.log(`[seed] cities: ${cityRows.length}`);
+
+  // Categories + subcategories — bulk
+  await prisma.category.createMany({
+    data: categories.map((c) => ({
+      id: c.id,
+      name: c.name,
+      emoji: c.emoji,
+      description: c.description,
+    })),
+  });
+  const subRows = categories.flatMap((cat) =>
+    cat.subcategories.map((s) => ({
+      id: s.id,
+      name: s.name,
+      group: s.group ?? null,
+      categoryId: cat.id,
+    })),
+  );
+  await prisma.subcategory.createMany({ data: subRows });
+  console.log(`[seed] categories: ${categories.length}, subcategories: ${subRows.length}`);
+
+  // Vendors — need to ensure each vendor's city exists. Auto-create
+  // fallback rows for vendors whose city isn't in the master cities list
+  // (e.g. "Goa, Goa").
+  const missingCities = new Map<string, { name: string; state: string; slug: string }>();
   for (const v of sampleVendors) {
-    let cityRow = await prisma.city.findFirst({
-      where: { name: v.city, state: v.state },
-    });
-    if (!cityRow) {
-      // Auto-create a city row for vendor-only references (e.g. "Goa, Goa"
-      // where the mock city list only has individual Goan cities).
-      const fallbackSlug = `${toSlug(v.city)}-${toSlug(v.state)}`;
-      cityRow = await prisma.city.upsert({
-        where: { slug: fallbackSlug },
-        update: { name: v.city, state: v.state },
-        create: { slug: fallbackSlug, name: v.city, state: v.state },
+    const key = `${v.city}|${v.state}`;
+    if (!cityByKey.has(key) && !missingCities.has(key)) {
+      missingCities.set(key, {
+        name: v.city,
+        state: v.state,
+        slug: `${toSlug(v.city)}-${toSlug(v.state)}`,
       });
-      console.log(`[seed] auto-created city for vendor ${v.id}: ${v.city}, ${v.state}`);
     }
-    const tagsJson = JSON.stringify(v.tags);
-    await prisma.vendor.upsert({
-      where: { id: v.id },
-      update: {
-        name: v.name,
-        description: v.description,
-        cityId: cityRow.id,
-        categoryId: v.categoryId,
-        rating: v.rating,
-        reviewCount: v.reviewCount,
-        priceRange: v.priceRange,
-        yearsExperience: v.yearsExperience,
-        verified: v.verified,
-        tags: tagsJson,
-      },
-      create: {
-        id: v.id,
-        name: v.name,
-        description: v.description,
-        cityId: cityRow.id,
-        categoryId: v.categoryId,
-        rating: v.rating,
-        reviewCount: v.reviewCount,
-        priceRange: v.priceRange,
-        yearsExperience: v.yearsExperience,
-        verified: v.verified,
-        tags: tagsJson,
-      },
-    });
   }
-  if (skipped > 0) console.warn(`[seed] vendors skipped: ${skipped}`);
-}
+  if (missingCities.size > 0) {
+    await prisma.city.createMany({ data: [...missingCities.values()] });
+    const refreshed = await prisma.city.findMany({
+      where: { slug: { in: [...missingCities.values()].map((c) => c.slug) } },
+      select: { id: true, name: true, state: true },
+    });
+    for (const c of refreshed) cityByKey.set(`${c.name}|${c.state}`, c.id);
+    console.log(`[seed] auto-created cities: ${missingCities.size}`);
+  }
 
-async function seedPackages(seededVendorIds: Set<string>) {
-  let total = 0;
-  for (const vendorId of Object.keys(packagesByVendor)) {
-    if (!seededVendorIds.has(vendorId)) continue;
-    const pkgs = packagesByVendor[vendorId];
-    await prisma.package.deleteMany({ where: { vendorId } });
-    for (const p of pkgs) {
-      await prisma.package.create({
-        data: {
+  await prisma.vendor.createMany({
+    data: sampleVendors.map((v) => ({
+      id: v.id,
+      name: v.name,
+      description: v.description,
+      cityId: cityByKey.get(`${v.city}|${v.state}`)!,
+      categoryId: v.categoryId,
+      rating: v.rating,
+      reviewCount: v.reviewCount,
+      priceRange: v.priceRange,
+      yearsExperience: v.yearsExperience,
+      verified: v.verified,
+      tags: JSON.stringify(v.tags),
+    })),
+  });
+  console.log(`[seed] vendors: ${sampleVendors.length}`);
+
+  const seededVendorIds = new Set(sampleVendors.map((v) => v.id));
+
+  // Packages — bulk (no client-side id; default cuid())
+  const packageRows = Object.entries(packagesByVendor).flatMap(([vendorId, pkgs]) =>
+    seededVendorIds.has(vendorId)
+      ? pkgs.map((p) => ({
           vendorId,
           tier: p.tier,
           name: p.name,
           price: p.price,
           features: JSON.stringify(p.features),
           popular: p.popular ?? false,
-        },
-      });
-      total++;
-    }
-  }
-  console.log(`[seed] packages: ${total}`);
-}
+        }))
+      : [],
+  );
+  await prisma.package.createMany({ data: packageRows });
+  console.log(`[seed] packages: ${packageRows.length}`);
 
-async function seedPortfolio(seededVendorIds: Set<string>) {
-  let total = 0;
-  for (const vendorId of Object.keys(portfolioByVendor)) {
-    if (!seededVendorIds.has(vendorId)) continue;
-    const imgs = portfolioByVendor[vendorId];
-    await prisma.portfolioImage.deleteMany({ where: { vendorId } });
-    for (const img of imgs) {
-      await prisma.portfolioImage.create({
-        data: {
+  // Portfolio — bulk
+  const portfolioRows = Object.entries(portfolioByVendor).flatMap(([vendorId, imgs]) =>
+    seededVendorIds.has(vendorId)
+      ? imgs.map((img) => ({
           id: img.id,
           vendorId,
           url: img.url,
           caption: img.caption,
           eventType: img.eventType,
-        },
-      });
-      total++;
-    }
-  }
-  console.log(`[seed] portfolio images: ${total}`);
-}
+        }))
+      : [],
+  );
+  await prisma.portfolioImage.createMany({ data: portfolioRows });
+  console.log(`[seed] portfolio images: ${portfolioRows.length}`);
 
-async function seedReviews(seededVendorIds: Set<string>) {
-  let total = 0;
-  for (const vendorId of Object.keys(reviewsByVendor)) {
-    if (!seededVendorIds.has(vendorId)) continue;
-    const reviews = reviewsByVendor[vendorId];
-    await prisma.review.deleteMany({ where: { vendorId } });
-    for (const r of reviews) {
-      await prisma.review.create({
-        data: {
+  // Reviews — bulk
+  const reviewRows = Object.entries(reviewsByVendor).flatMap(([vendorId, rs]) =>
+    seededVendorIds.has(vendorId)
+      ? rs.map((r) => ({
           id: r.id,
           vendorId,
           author: r.author,
@@ -174,69 +171,37 @@ async function seedReviews(seededVendorIds: Set<string>) {
           title: r.title,
           body: r.body,
           eventType: r.eventType,
-        },
-      });
-      total++;
-    }
-  }
-  console.log(`[seed] reviews: ${total}`);
-}
-
-async function seedBookedDates(seededVendorIds: Set<string>) {
-  let total = 0;
-  for (const vendorId of Object.keys(bookedDatesByVendor)) {
-    if (!seededVendorIds.has(vendorId)) continue;
-    const dates = bookedDatesByVendor[vendorId];
-    await prisma.bookedDate.deleteMany({ where: { vendorId } });
-    for (const date of dates) {
-      await prisma.bookedDate.create({ data: { vendorId, date } });
-      total++;
-    }
-  }
-  console.log(`[seed] booked dates: ${total}`);
-}
-
-async function seedVendorStats(seededVendorIds: Set<string>) {
-  let total = 0;
-  for (const vendorId of Object.keys(statsByVendor)) {
-    if (!seededVendorIds.has(vendorId)) continue;
-    const s = statsByVendor[vendorId];
-    await prisma.vendorStats.upsert({
-      where: { vendorId },
-      update: {
-        weddingsCompleted: s.weddingsCompleted,
-        customersServed: s.customersServed,
-        responseTime: s.responseTime,
-        yearsExperience: s.yearsExperience,
-      },
-      create: {
-        vendorId,
-        weddingsCompleted: s.weddingsCompleted,
-        customersServed: s.customersServed,
-        responseTime: s.responseTime,
-        yearsExperience: s.yearsExperience,
-      },
-    });
-    total++;
-  }
-  console.log(`[seed] vendor stats: ${total}`);
-}
-
-async function main() {
-  const slugs = buildCitySlugs();
-  await seedCities(slugs);
-  await seedCategories();
-  await seedVendors();
-  // Only seed children for vendors that actually exist in the DB.
-  const seededVendorIds = new Set(
-    (await prisma.vendor.findMany({ select: { id: true } })).map((v) => v.id),
+        }))
+      : [],
   );
-  await seedPackages(seededVendorIds);
-  await seedPortfolio(seededVendorIds);
-  await seedReviews(seededVendorIds);
-  await seedBookedDates(seededVendorIds);
-  await seedVendorStats(seededVendorIds);
-  console.log("[seed] complete");
+  await prisma.review.createMany({ data: reviewRows });
+  console.log(`[seed] reviews: ${reviewRows.length}`);
+
+  // Booked dates — bulk
+  const bookedRows = Object.entries(bookedDatesByVendor).flatMap(([vendorId, dates]) =>
+    seededVendorIds.has(vendorId) ? dates.map((date) => ({ vendorId, date })) : [],
+  );
+  await prisma.bookedDate.createMany({ data: bookedRows });
+  console.log(`[seed] booked dates: ${bookedRows.length}`);
+
+  // Vendor stats — bulk
+  const statsRows = Object.entries(statsByVendor).flatMap(([vendorId, s]) =>
+    seededVendorIds.has(vendorId)
+      ? [
+          {
+            vendorId,
+            weddingsCompleted: s.weddingsCompleted,
+            customersServed: s.customersServed,
+            responseTime: s.responseTime,
+            yearsExperience: s.yearsExperience,
+          },
+        ]
+      : [],
+  );
+  await prisma.vendorStats.createMany({ data: statsRows });
+  console.log(`[seed] vendor stats: ${statsRows.length}`);
+
+  console.timeEnd("[seed] total");
 }
 
 main()
