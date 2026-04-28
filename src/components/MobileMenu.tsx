@@ -47,6 +47,13 @@ export default function MobileMenu() {
               Vendors
             </Link>
             <Link
+              href="/plan"
+              onClick={() => setIsOpen(false)}
+              className="px-4 py-2 text-sm font-medium text-slate-700 hover:bg-rose-50 rounded-lg transition-colors"
+            >
+              Planning Tools
+            </Link>
+            <Link
               href="/functions"
               onClick={() => setIsOpen(false)}
               className="px-4 py-2 text-sm font-medium text-slate-700 hover:bg-rose-50 rounded-lg transition-colors"
