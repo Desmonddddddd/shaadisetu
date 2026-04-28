@@ -6,13 +6,13 @@ config({ path: path.resolve(process.cwd(), ".env") });
 import { PrismaClient } from "../src/generated/prisma";
 import { cities } from "../src/data/cities";
 import { categories } from "../src/data/categories";
-import { sampleVendors } from "../src/data/vendors";
-import { packagesByVendor } from "../src/data/packages";
-import { portfolioByVendor } from "../src/data/portfolio";
-import { reviewsByVendor } from "../src/data/reviews";
-import { bookedDatesByVendor } from "../src/data/availability";
-import { statsByVendor } from "../src/data/stats";
-import { toSlug } from "../src/lib/slugs";
+import { sampleVendors } from "./seed-data/vendors";
+import { packagesByVendor } from "./seed-data/packages";
+import { portfolioByVendor } from "./seed-data/portfolio";
+import { reviewsByVendor } from "./seed-data/reviews";
+import { bookedDatesByVendor } from "./seed-data/availability";
+import { statsByVendor } from "./seed-data/stats";
+import { toSlug } from "./seed-data/slugs";
 
 const prisma = new PrismaClient();
 
