@@ -6,6 +6,7 @@ import { CompareTray } from "@/components/compare/CompareTray";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import TrackOfTheDay from "@/components/TrackOfTheDay";
+import SaathiChat from "@/components/SaathiChat";
 import "./globals.css";
 
 const geist = Geist({ variable: "--font-geist", subsets: ["latin"] });
@@ -32,6 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Footer />
             <CompareTray />
             <TrackOfTheDay />
+            <SaathiChat />
           </CompareProvider>
         </CityProvider>
       </body>

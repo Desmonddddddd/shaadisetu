@@ -19,6 +19,7 @@
     "test:int": "vitest run --config vitest.integration.config.ts"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.91.1",
     "@auth/prisma-adapter": "^2.11.2",
     "bcryptjs": "^3.0.3",
     "cloudinary": "^2.10.0",
