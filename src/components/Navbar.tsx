@@ -62,9 +62,12 @@ export default function Navbar() {
             <span className="block w-px h-5 bg-ink/15" />
             <Link
               href="/account/signup"
-              className="btn-editorial text-[0.7rem]"
+              aria-label="Sign in"
+              className="w-9 h-9 flex items-center justify-center bg-ink text-cream hover:bg-bordeaux transition-colors"
             >
-              Join
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.8}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.5 20.118a7.5 7.5 0 0 1 15 0A17.93 17.93 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+              </svg>
             </Link>
           </div>
 
