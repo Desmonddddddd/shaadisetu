@@ -1,6 +1,6 @@
 "use client";
 import { useMemo } from "react";
-import type { Vendor } from "@/data/vendors";
+import type { Vendor } from "@/types/vendor";
 import { applyFilters, useVendorFilters } from "@/hooks/useVendorFilters";
 import { VendorRowCard } from "./VendorRowCard";
 
@@ -22,7 +22,7 @@ export function VendorListingResults({ vendors }: { vendors: Vendor[] }) {
   return (
     <div className="grid grid-cols-1 gap-3">
       {filtered.map((v) => (
-        <VendorRowCard key={v.id} vendor={v} filterDate={filters.date} />
+        <VendorRowCard key={v.id} vendor={v} />
       ))}
     </div>
   );

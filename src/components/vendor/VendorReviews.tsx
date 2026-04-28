@@ -1,4 +1,4 @@
-import type { Review } from "@/data/reviews";
+import type { Review } from "@/types/vendor";
 
 export function VendorReviews({ reviews }: { reviews: Review[] }) {
   const avg = reviews.reduce((s, r) => s + r.rating, 0) / reviews.length;

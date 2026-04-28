@@ -1,9 +1,12 @@
-import { findCategoryBySlug } from "@/lib/slugs";
-import type { Vendor } from "@/data/vendors";
+import { db } from "@/lib/db";
+import type { Vendor } from "@/types/vendor";
 
-export function VendorServicesList({ vendor }: { vendor: Vendor }) {
-  const category = findCategoryBySlug(vendor.categoryId);
-  const services = category?.subcategories ?? [];
+export async function VendorServicesList({ vendor }: { vendor: Vendor }) {
+  const services = await db.subcategory.findMany({
+    where: { categoryId: vendor.categoryId },
+    orderBy: { name: "asc" },
+  });
+  if (services.length === 0) return null;
   return (
     <section>
       <h2 className="text-lg font-semibold text-slate-900 mb-3">Services Offered</h2>

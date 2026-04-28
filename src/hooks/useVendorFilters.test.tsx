@@ -1,8 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { renderHook, act } from "@testing-library/react";
 import { useVendorFilters, applyFilters, FilterState } from "./useVendorFilters";
-import { sampleVendors } from "@/data/vendors";
-import { bookedDatesByVendor } from "@/data/availability";
+import { makeVendor } from "@/test/fixtures";
 
 const replaceMock = vi.fn();
 let searchParams = new URLSearchParams();
@@ -18,8 +17,13 @@ beforeEach(() => {
   replaceMock.mockClear();
 });
 
+const photog = [
+  makeVendor({ id: "v1", rating: 4.9, reviewCount: 200, priceRange: "₹50K-₹1L" }),
+  makeVendor({ id: "v2", rating: 4.6, reviewCount: 80, priceRange: "₹1L-₹2L" }),
+  makeVendor({ id: "v3", rating: 4.3, reviewCount: 50, priceRange: "₹2L+" }),
+];
+
 describe("applyFilters", () => {
-  const photog = sampleVendors.filter((v) => v.categoryId === "photography");
   it("filters by min rating", () => {
     const out = applyFilters(photog, { rating: 4.7 } as FilterState);
     expect(out.every((v) => v.rating >= 4.7)).toBe(true);
@@ -44,22 +48,5 @@ describe("useVendorFilters", () => {
     const { result } = renderHook(() => useVendorFilters());
     act(() => result.current.setFilter("rating", 4.5));
     expect(replaceMock).toHaveBeenCalledWith(expect.stringContaining("rating=4.5"));
-  });
-});
-
-describe("applyFilters — booked + sort interaction", () => {
-  it("booked vendors stay at the bottom when sort=rating and date is set", () => {
-    const v = sampleVendors[0];
-    const date = bookedDatesByVendor[v.id][0];
-    const out = applyFilters(sampleVendors, { sort: "rating", date } as FilterState);
-
-    let seenAvailableAfterBooked = false;
-    let lastWasBooked = false;
-    for (const x of out) {
-      const booked = bookedDatesByVendor[x.id]?.includes(date) ?? false;
-      if (lastWasBooked && !booked) seenAvailableAfterBooked = true;
-      lastWasBooked = booked;
-    }
-    expect(seenAvailableAfterBooked).toBe(false);
   });
 });

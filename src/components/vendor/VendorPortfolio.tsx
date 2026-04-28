@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import type { PortfolioImage } from "@/data/portfolio";
+import type { PortfolioImage } from "@/types/vendor";
 
 export function VendorPortfolio({ images }: { images: PortfolioImage[] }) {
   const [active, setActive] = useState<number | null>(null);

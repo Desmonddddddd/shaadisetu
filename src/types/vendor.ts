@@ -15,7 +15,10 @@ import type {
  * JSON-encoded strings (SQLite limitation); UI consumers always see
  * decoded arrays. The query layer decodes; the seed layer encodes.
  */
-export type Vendor = Omit<PrismaVendor, "tags"> & { tags: string[] };
+export type Vendor = Omit<PrismaVendor, "tags"> & {
+  tags: string[];
+  city: { name: string };
+};
 export type Package = Omit<PrismaPackage, "features"> & { features: string[] };
 export type PortfolioImage = PrismaPortfolioImage;
 export type Review = PrismaReview;

@@ -1,10 +1,13 @@
 import { notFound } from "next/navigation";
-import { sampleVendors } from "@/data/vendors";
-import { findCityBySlug, findCategoryBySlug } from "@/lib/slugs";
+import { db } from "@/lib/db";
+import { getVendorsForListing } from "@/lib/queries/vendors";
 import { VendorListingFilters } from "@/components/vendor/VendorListingFilters";
 import { VendorListingResults } from "@/components/vendor/VendorListingResults";
 
-interface Params { city: string; category: string }
+interface Params {
+  city: string;
+  category: string;
+}
 
 export default async function VendorListing({
   params,
@@ -12,25 +15,26 @@ export default async function VendorListing({
   params: Promise<Params>;
 }) {
   const { city, category } = await params;
-  const cityObj = findCityBySlug(city);
-  const categoryObj = findCategoryBySlug(category);
-  if (!cityObj || !categoryObj) notFound();
+  const cityRow = await db.city.findUnique({ where: { slug: city } });
+  const categoryRow = await db.category.findUnique({ where: { id: category } });
+  if (!cityRow || !categoryRow) notFound();
 
-  const matching = sampleVendors.filter(
-    (v) => v.categoryId === categoryObj.id && v.city === cityObj.name,
-  );
+  const vendors = await getVendorsForListing({
+    cityId: cityRow.id,
+    categoryId: categoryRow.id,
+  });
 
   return (
     <main className="max-w-6xl mx-auto px-4 py-6">
       <header className="mb-3">
         <h1 className="text-2xl font-semibold text-slate-900">
-          {categoryObj.name} in {cityObj.name}
+          {categoryRow.name} in {cityRow.name}
         </h1>
-        <p className="text-sm text-slate-600">{matching.length} vendors</p>
+        <p className="text-sm text-slate-600">{vendors.length} vendors</p>
       </header>
 
-      <VendorListingFilters cityName={cityObj.name} categoryName={categoryObj.name} />
-      <VendorListingResults vendors={matching} />
+      <VendorListingFilters cityName={cityRow.name} categoryName={categoryRow.name} />
+      <VendorListingResults vendors={vendors} />
     </main>
   );
 }

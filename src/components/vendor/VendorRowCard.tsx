@@ -1,18 +1,15 @@
 "use client";
 import Link from "next/link";
-import type { Vendor } from "@/data/vendors";
+import type { Vendor } from "@/types/vendor";
 import { useCompare } from "@/context/CompareContext";
-import { isBooked } from "@/data/availability";
 
 interface Props {
   vendor: Vendor;
-  filterDate?: string;
 }
 
-export function VendorRowCard({ vendor, filterDate }: Props) {
+export function VendorRowCard({ vendor }: Props) {
   const { has, add, remove } = useCompare();
   const inCompare = has(vendor.id);
-  const booked = filterDate ? isBooked(vendor.id, filterDate) : false;
 
   return (
     <article className="grid grid-cols-[80px_1fr_auto] gap-4 p-4 bg-white border border-gray-200 rounded-xl hover:shadow-md transition-shadow">
@@ -36,9 +33,6 @@ export function VendorRowCard({ vendor, filterDate }: Props) {
       </div>
 
       <div className="flex flex-col items-end gap-2">
-        <span className={`text-xs ${booked ? "text-red-600" : "text-emerald-600"}`}>
-          ● {booked ? "Booked" : "Available"}
-        </span>
         <button
           type="button"
           onClick={() => (inCompare ? remove(vendor.id) : add(vendor.id))}

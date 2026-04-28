@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { VendorEnquiryRail } from "./VendorEnquiryRail";
-import { sampleVendors } from "@/data/vendors";
+import { makeVendor } from "@/test/fixtures";
 
 beforeEach(() => {
   localStorage.clear();
@@ -14,7 +14,7 @@ beforeEach(() => {
 describe("VendorEnquiryRail", () => {
   it("shows inline error for invalid phone", async () => {
     const user = userEvent.setup();
-    render(<VendorEnquiryRail vendor={sampleVendors[0]} />);
+    render(<VendorEnquiryRail vendor={makeVendor()} />);
     await user.type(screen.getByLabelText(/name/i), "Priya");
     await user.type(screen.getByLabelText(/phone/i), "12345");
     await user.click(screen.getByRole("button", { name: /send enquiry/i }));
@@ -23,7 +23,7 @@ describe("VendorEnquiryRail", () => {
 
   it("shows thank-you state on success", async () => {
     const user = userEvent.setup();
-    render(<VendorEnquiryRail vendor={sampleVendors[0]} />);
+    render(<VendorEnquiryRail vendor={makeVendor()} />);
     await user.type(screen.getByLabelText(/name/i), "Priya");
     await user.type(screen.getByLabelText(/phone/i), "9876543210");
     await user.type(screen.getByLabelText(/event date/i), "2099-12-31");

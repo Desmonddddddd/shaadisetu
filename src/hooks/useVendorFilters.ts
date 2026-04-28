@@ -2,8 +2,7 @@
 import { useCallback, useMemo } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { z } from "zod";
-import type { Vendor } from "@/data/vendors";
-import { isBooked } from "@/data/availability";
+import type { Vendor } from "@/types/vendor";
 
 export type SortKey = "popularity" | "rating" | "price-asc" | "price-desc";
 
@@ -52,15 +51,7 @@ export function applyFilters(vendors: Vendor[], f: FilterState): Vendor[] {
     }
   })();
 
-  if (f.date) {
-    const date = f.date;
-    out.sort((a, b) => {
-      const bookedDelta = Number(isBooked(a.id, date)) - Number(isBooked(b.id, date));
-      return bookedDelta !== 0 ? bookedDelta : secondary(a, b);
-    });
-  } else {
-    out.sort(secondary);
-  }
+  out.sort(secondary);
   return out;
 }
 

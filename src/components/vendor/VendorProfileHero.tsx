@@ -1,8 +1,11 @@
-import type { Vendor } from "@/data/vendors";
-import { statsByVendor } from "@/data/stats";
+import type { Vendor, VendorStats } from "@/types/vendor";
 
-export function VendorProfileHero({ vendor }: { vendor: Vendor }) {
-  const stats = statsByVendor[vendor.id];
+interface Props {
+  vendor: Vendor;
+  stats: VendorStats | null;
+}
+
+export function VendorProfileHero({ vendor, stats }: Props) {
   return (
     <header className="bg-gradient-to-br from-shaadi-light via-shaadi-rose to-shaadi-deep text-white p-6 rounded-2xl">
       <div className="flex items-start justify-between gap-4">
@@ -14,15 +17,17 @@ export function VendorProfileHero({ vendor }: { vendor: Vendor }) {
             )}
           </h1>
           <p className="text-sm opacity-90">
-            ⭐ {vendor.rating} ({vendor.reviewCount}) · {vendor.city} · {vendor.yearsExperience} yrs
+            ⭐ {vendor.rating} ({vendor.reviewCount}) · {vendor.city.name} · {vendor.yearsExperience} yrs
           </p>
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-3 mt-4">
-        <Stat label="Weddings" value={stats.weddingsCompleted.toLocaleString()} />
-        <Stat label="Customers" value={stats.customersServed.toLocaleString()} />
-        <Stat label="Response" value={stats.responseTime} />
-      </div>
+      {stats && (
+        <div className="grid grid-cols-3 gap-3 mt-4">
+          <Stat label="Weddings" value={stats.weddingsCompleted.toLocaleString()} />
+          <Stat label="Customers" value={stats.customersServed.toLocaleString()} />
+          <Stat label="Response" value={stats.responseTime} />
+        </div>
+      )}
     </header>
   );
 }

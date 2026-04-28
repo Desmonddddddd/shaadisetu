@@ -31,6 +31,7 @@ export async function getVendorsForListing(params: {
   const rows = await db.vendor.findMany({
     where: { cityId: params.cityId, categoryId: params.categoryId },
     orderBy: { reviewCount: "desc" },
+    include: { city: { select: { name: true } } },
   });
   return rows.map(rowToVendor);
 }
@@ -39,6 +40,7 @@ export async function getVendorProfile(id: string): Promise<VendorWithProfile | 
   const row = await db.vendor.findUnique({
     where: { id },
     include: {
+      city: { select: { name: true } },
       packages: { orderBy: { price: "asc" } },
       portfolio: true,
       reviews: { orderBy: { date: "desc" } },
@@ -59,7 +61,10 @@ export async function getVendorProfile(id: string): Promise<VendorWithProfile | 
 
 export async function getVendorsByIds(ids: string[]): Promise<Vendor[]> {
   if (ids.length === 0) return [];
-  const rows = await db.vendor.findMany({ where: { id: { in: ids } } });
+  const rows = await db.vendor.findMany({
+    where: { id: { in: ids } },
+    include: { city: { select: { name: true } } },
+  });
   const byId = new Map(rows.map((r) => [r.id, r]));
   return ids
     .map((id) => byId.get(id))

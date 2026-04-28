@@ -1,9 +1,8 @@
 "use client";
 import { useState } from "react";
-import type { Vendor } from "@/data/vendors";
+import type { Vendor } from "@/types/vendor";
 import { useEnquiry } from "@/hooks/useEnquiry";
 import { enquirySchema } from "@/lib/validators";
-import { isBooked } from "@/data/availability";
 
 const EVENT_TYPES = ["haldi", "mehendi", "wedding", "reception", "engagement", "sangeet"] as const;
 
@@ -17,7 +16,7 @@ export function VendorEnquiryRail({ vendor }: { vendor: Vendor }) {
   // Local-date today (avoid UTC drift)
   const tnow = new Date();
   const today = `${tnow.getFullYear()}-${String(tnow.getMonth() + 1).padStart(2, "0")}-${String(tnow.getDate()).padStart(2, "0")}`;
-  const dateBookedWarning = form.eventDate && isBooked(vendor.id, form.eventDate);
+  const dateBookedWarning = false;
 
   if (status === "success") {
     return (
