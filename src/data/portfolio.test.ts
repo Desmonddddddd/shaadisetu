@@ -15,3 +15,21 @@ describe("portfolioByVendor", () => {
     }
   });
 });
+
+describe("portfolio URLs", () => {
+  it("every URL has w=1200&q=80 query params", () => {
+    for (const v of sampleVendors) {
+      for (const img of portfolioByVendor[v.id]) {
+        expect(img.url).toMatch(/\?w=1200&q=80$/);
+      }
+    }
+  });
+});
+
+describe("portfolio determinism", () => {
+  it("first vendor's image ids are stable", () => {
+    const first = sampleVendors[0];
+    const ids = portfolioByVendor[first.id].slice(0, 3).map((i) => i.id);
+    expect(ids).toEqual([`${first.id}-0`, `${first.id}-1`, `${first.id}-2`]);
+  });
+});
