@@ -115,6 +115,109 @@ body {
   color: #f8f5ee;
 }
 
+/* ─── Motion utilities ─── */
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes pill-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(201, 168, 106, 0.4); }
+  70%  { box-shadow: 0 0 0 8px rgba(201, 168, 106, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(201, 168, 106, 0); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.fade-up { opacity: 0; animation: fade-up 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.fade-in { opacity: 0; animation: fade-in 0.5s ease forwards; }
+
+.stagger-1 { animation-delay: 60ms; }
+.stagger-2 { animation-delay: 120ms; }
+.stagger-3 { animation-delay: 180ms; }
+.stagger-4 { animation-delay: 240ms; }
+.stagger-5 { animation-delay: 300ms; }
+.stagger-6 { animation-delay: 360ms; }
+.stagger-7 { animation-delay: 420ms; }
+.stagger-8 { animation-delay: 480ms; }
+
+.pill-pulse { animation: pill-pulse 1.6s ease-out 1; }
+
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(201, 168, 106, 0.06) 0%,
+    rgba(201, 168, 106, 0.18) 50%,
+    rgba(201, 168, 106, 0.06) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.6s ease-in-out infinite;
+}
+
+/* Editorial input — used in filters and forms */
+.editorial-input {
+  background: #fffdf8;
+  border: 1px solid rgba(26, 26, 26, 0.12);
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  color: #1a1a1a;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  outline: none;
+}
+
+.editorial-input:focus {
+  border-color: #c9a86a;
+  box-shadow: 0 0 0 3px rgba(201, 168, 106, 0.15);
+}
+
+.editorial-input::placeholder {
+  color: rgba(58, 58, 58, 0.55);
+  font-style: italic;
+}
+
+/* Filter pill */
+.filter-pill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.1rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #3a3a3a;
+  background: transparent;
+  border: 1px solid rgba(26, 26, 26, 0.15);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.filter-pill:hover {
+  border-color: #c9a86a;
+  color: #1a1a1a;
+}
+
+.filter-pill[data-active="true"] {
+  background: #1a1a1a;
+  color: #f8f5ee;
+  border-color: #1a1a1a;
+}
+
+.filter-pill[data-active="true"]:hover {
+  background: #6b1f2a;
+  border-color: #6b1f2a;
+}
+
 /* Gold underline animated link */
 .editorial-link {
   position: relative;
