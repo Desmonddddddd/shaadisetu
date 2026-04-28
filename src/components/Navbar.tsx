@@ -40,7 +40,6 @@ export default function Navbar() {
               { label: "Functions", href: "/functions" },
               { label: "ShaadiWall", href: "/wall" },
               { label: "Finance", href: "/finance" },
-              { label: "Diaries", href: "/client-diaries" },
               { label: "About", href: "/about" },
             ].map((link) => (
               <Link

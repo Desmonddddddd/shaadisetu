@@ -74,13 +74,6 @@ export default function MobileMenu() {
             >
               Finance
             </Link>
-            <Link
-              href="/client-diaries"
-              onClick={() => setIsOpen(false)}
-              className="px-4 py-2 text-sm font-medium text-slate-700 hover:bg-cream-soft rounded-lg transition-colors"
-            >
-              Client Diaries
-            </Link>
           </nav>
           <Link
             href="/membership"

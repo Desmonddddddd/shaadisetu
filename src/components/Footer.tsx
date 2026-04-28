@@ -9,7 +9,8 @@ const COLUMNS = [
       { label: "Browse Vendors", href: "/vendors" },
       { label: "Plan With Me", href: "/plan-with-me" },
       { label: "Wedding Functions", href: "/functions" },
-      { label: "Client Diaries", href: "/client-diaries" },
+      { label: "ShaadiWall", href: "/wall" },
+      { label: "Real Stories", href: "/wall#stories" },
     ],
   },
   {

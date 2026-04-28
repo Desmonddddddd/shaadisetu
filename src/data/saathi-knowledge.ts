@@ -16,8 +16,8 @@ Tone of the site: calm, editorial, serif-display, cream/ink/champagne/bordeaux.
 - Plan (/plan) — planning hub. Tools: /plan/budget (budget calculator across categories) and /plan/checklist (wedding checklist).
 - Plan-with-me (/plan-with-me) — concierge questionnaire that collects details for hands-on planning help.
 - Functions (/functions) — guides for each wedding function (Mehendi, Sangeet, Haldi, Roka, Reception, etc.).
-- Client diaries (/client-diaries) — editorial real-wedding stories.
 - Finance (/finance) — Wedding insurance & wedding-loan guidance.
+- Legal: /privacy, /terms, /cookies, /refund.
 - Blog (/blog) — written guides.
 - About (/about), Login (/login), Sign up (/signup), Account (/account), Membership (/membership).
 
@@ -48,9 +48,15 @@ Disclaimer: ShaadiSetu does NOT sell or distribute financial products.
 Information shown is for guidance only; verify with the partner directly.
 
 ## ShaadiWall (/wall)
-Curated editorial inspiration in four sections:
-Big-fat weddings, Minimalist, Photography styles, Must-haves.
-Includes a "From our vendors" featured strip.
+The single editorial inspiration + storytelling hub on the site. Sections:
+Big-fat weddings, Minimalist, Photography styles, Stories (long-form
+diaries from real couples — Priya & Rahul in Jaipur, Ananya & Vikram
+Mumbai → Goa, Meera & Arjun in Delhi, Sanya & Karan in Udaipur),
+Must-haves, "Featured · From our vendors" strip, and Voices (unedited
+verified reviews from real couples). Counters at the top show couples
+served, vendors, average rating, and reviews published. The old
+/client-diaries page has been merged into /wall — point users there
+instead. Direct deep-links: /wall#stories, /wall#voices.
 
 ## Plan tools
 - /plan/budget — set total budget, see suggested split across categories.
