@@ -2,12 +2,15 @@
 import Link from "next/link";
 import type { Vendor } from "@/types/vendor";
 import { useCompare } from "@/context/CompareContext";
+import { SaveButton } from "@/components/account/SaveButton";
 
 interface Props {
   vendor: Vendor;
+  isAuthed?: boolean;
+  initialSaved?: boolean;
 }
 
-export function VendorRowCard({ vendor }: Props) {
+export function VendorRowCard({ vendor, isAuthed = false, initialSaved = false }: Props) {
   const { has, add, remove } = useCompare();
   const inCompare = has(vendor.id);
 
@@ -33,6 +36,12 @@ export function VendorRowCard({ vendor }: Props) {
       </div>
 
       <div className="flex flex-col items-end gap-2">
+        <SaveButton
+          vendorId={vendor.id}
+          initialSaved={initialSaved}
+          isAuthed={isAuthed}
+          variant="icon"
+        />
         <button
           type="button"
           onClick={() => (inCompare ? remove(vendor.id) : add({ id: vendor.id, name: vendor.name }))}

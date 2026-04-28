@@ -4,6 +4,7 @@ import { createEnquiry } from "@/lib/queries/enquiries";
 import { Prisma } from "@/generated/prisma";
 import { db } from "@/lib/db";
 import { sendNewEnquiryEmail } from "@/lib/email";
+import { getOptionalUserSession } from "@/lib/auth/session";
 
 export async function POST(request: Request) {
   let body: unknown;
@@ -20,7 +21,11 @@ export async function POST(request: Request) {
     );
   }
   try {
-    const { id } = await createEnquiry(parsed.data);
+    const userSess = await getOptionalUserSession();
+    const { id } = await createEnquiry({
+      ...parsed.data,
+      userId: userSess?.userId ?? null,
+    });
     db.vendor
       .findUnique({
         where: { id: parsed.data.vendorId },

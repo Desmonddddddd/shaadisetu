@@ -20,6 +20,7 @@ export const authConfig = {
     authorized({ auth, request }) {
       const { pathname } = request.nextUrl;
       if (pathname.startsWith("/vendor/dashboard")) return !!auth;
+      if (pathname.startsWith("/account")) return !!auth;
       return true;
     },
   },

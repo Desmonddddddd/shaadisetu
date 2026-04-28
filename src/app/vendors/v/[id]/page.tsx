@@ -1,5 +1,7 @@
 import { notFound } from "next/navigation";
 import { getVendorProfile } from "@/lib/queries/vendors";
+import { getOptionalUserSession } from "@/lib/auth/session";
+import { isVendorSaved } from "@/lib/queries/saved";
 import { VendorProfileHero } from "@/components/vendor/VendorProfileHero";
 import { VendorPortfolio } from "@/components/vendor/VendorPortfolio";
 import { VendorPackages } from "@/components/vendor/VendorPackages";
@@ -17,12 +19,20 @@ export default async function VendorProfile({
   const vendor = await getVendorProfile(id);
   if (!vendor) notFound();
 
+  const userSess = await getOptionalUserSession();
+  const initialSaved = userSess ? await isVendorSaved(userSess.userId, vendor.id) : false;
+
   const bookedDates = vendor.bookedDates.map((b) => b.date);
 
   return (
     <main className="max-w-6xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-6">
       <div className="space-y-8 min-w-0">
-        <VendorProfileHero vendor={vendor} stats={vendor.stats} />
+        <VendorProfileHero
+          vendor={vendor}
+          stats={vendor.stats}
+          isAuthed={!!userSess}
+          initialSaved={initialSaved}
+        />
         <section>
           <h2 className="text-lg font-semibold text-slate-900 mb-2">About</h2>
           <p className="text-slate-700">{vendor.description}</p>

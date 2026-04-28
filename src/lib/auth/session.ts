@@ -13,14 +13,16 @@ export class ForbiddenError extends Error {
   }
 }
 
+type SessionUser = { id?: string; kind?: "vendor" | "user" };
+
 export async function requireVendorSession(): Promise<{
   accountId: string;
   vendorId: string;
 }> {
   const session = await auth();
-  const userId = (session?.user as { id?: string } | undefined)?.id;
-  if (!userId) throw new UnauthorizedError();
-  const account = await db.vendorAccount.findUnique({ where: { id: userId } });
+  const u = session?.user as SessionUser | undefined;
+  if (!u?.id || u.kind !== "vendor") throw new UnauthorizedError();
+  const account = await db.vendorAccount.findUnique({ where: { id: u.id } });
   if (!account) throw new UnauthorizedError();
   if (account.status !== "active" || !account.vendorId) throw new ForbiddenError();
   return { accountId: account.id, vendorId: account.vendorId };
@@ -32,9 +34,31 @@ export async function getOptionalVendorSession(): Promise<{
   status: string;
 } | null> {
   const session = await auth();
-  const userId = (session?.user as { id?: string } | undefined)?.id;
-  if (!userId) return null;
-  const account = await db.vendorAccount.findUnique({ where: { id: userId } });
+  const u = session?.user as SessionUser | undefined;
+  if (!u?.id || u.kind !== "vendor") return null;
+  const account = await db.vendorAccount.findUnique({ where: { id: u.id } });
   if (!account) return null;
   return { accountId: account.id, vendorId: account.vendorId, status: account.status };
+}
+
+export async function requireUserSession(): Promise<{ userId: string; email: string }> {
+  const session = await auth();
+  const u = session?.user as SessionUser | undefined;
+  if (!u?.id || u.kind !== "user") throw new UnauthorizedError();
+  const account = await db.userAccount.findUnique({ where: { id: u.id } });
+  if (!account) throw new UnauthorizedError();
+  return { userId: account.id, email: account.email };
+}
+
+export async function getOptionalUserSession(): Promise<{
+  userId: string;
+  email: string;
+  name: string | null;
+} | null> {
+  const session = await auth();
+  const u = session?.user as SessionUser | undefined;
+  if (!u?.id || u.kind !== "user") return null;
+  const account = await db.userAccount.findUnique({ where: { id: u.id } });
+  if (!account) return null;
+  return { userId: account.id, email: account.email, name: account.name };
 }

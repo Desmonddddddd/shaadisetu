@@ -1,11 +1,19 @@
 import type { Vendor, VendorStats } from "@/types/vendor";
+import { SaveButton } from "@/components/account/SaveButton";
 
 interface Props {
   vendor: Vendor;
   stats: VendorStats | null;
+  isAuthed?: boolean;
+  initialSaved?: boolean;
 }
 
-export function VendorProfileHero({ vendor, stats }: Props) {
+export function VendorProfileHero({
+  vendor,
+  stats,
+  isAuthed = false,
+  initialSaved = false,
+}: Props) {
   return (
     <header className="bg-gradient-to-br from-shaadi-light via-shaadi-rose to-shaadi-deep text-white p-6 rounded-2xl">
       <div className="flex items-start justify-between gap-4">
@@ -19,6 +27,15 @@ export function VendorProfileHero({ vendor, stats }: Props) {
           <p className="text-sm opacity-90">
             ⭐ {vendor.rating} ({vendor.reviewCount}) · {vendor.city.name} · {vendor.yearsExperience} yrs
           </p>
+        </div>
+        <div className="shrink-0">
+          <SaveButton
+            vendorId={vendor.id}
+            initialSaved={initialSaved}
+            isAuthed={isAuthed}
+            variant="pill"
+            className="!bg-white/15 !border-white/30 !text-white hover:!bg-white/25"
+          />
         </div>
       </div>
       {stats && (

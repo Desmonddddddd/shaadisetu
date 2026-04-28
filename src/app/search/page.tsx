@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { db } from "@/lib/db";
 import { searchVendors, getDistinctPriceRanges } from "@/lib/queries/search";
+import { getOptionalUserSession } from "@/lib/auth/session";
+import { getSavedVendors } from "@/lib/queries/saved";
 import { SearchBar } from "@/components/search/SearchBar";
 import { SearchFacets } from "@/components/search/SearchFacets";
 import { VendorListingResults } from "@/components/vendor/VendorListingResults";
@@ -35,6 +37,11 @@ export default async function SearchPage({
     getDistinctPriceRanges(),
   ]);
 
+  const userSess = await getOptionalUserSession();
+  const savedVendorIds = userSess
+    ? (await getSavedVendors(userSess.userId)).map((s) => s.vendor.id)
+    : [];
+
   return (
     <main className="max-w-6xl mx-auto px-4 py-6 space-y-4">
       <header className="space-y-3">
@@ -66,7 +73,11 @@ export default async function SearchPage({
               .
             </div>
           ) : (
-            <VendorListingResults vendors={vendors} />
+            <VendorListingResults
+              vendors={vendors}
+              isAuthed={!!userSess}
+              savedVendorIds={savedVendorIds}
+            />
           )}
         </div>
       </div>

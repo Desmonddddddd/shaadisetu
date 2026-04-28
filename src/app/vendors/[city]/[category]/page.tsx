@@ -1,6 +1,8 @@
 import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
 import { getVendorsForListing } from "@/lib/queries/vendors";
+import { getOptionalUserSession } from "@/lib/auth/session";
+import { getSavedVendors } from "@/lib/queries/saved";
 import { VendorListingFilters } from "@/components/vendor/VendorListingFilters";
 import { VendorListingResults } from "@/components/vendor/VendorListingResults";
 
@@ -24,6 +26,11 @@ export default async function VendorListing({
     categoryId: categoryRow.id,
   });
 
+  const userSess = await getOptionalUserSession();
+  const savedVendorIds = userSess
+    ? (await getSavedVendors(userSess.userId)).map((s) => s.vendor.id)
+    : [];
+
   return (
     <main className="max-w-6xl mx-auto px-4 py-6">
       <header className="mb-3">
@@ -34,7 +41,11 @@ export default async function VendorListing({
       </header>
 
       <VendorListingFilters cityName={cityRow.name} categoryName={categoryRow.name} />
-      <VendorListingResults vendors={vendors} />
+      <VendorListingResults
+        vendors={vendors}
+        isAuthed={!!userSess}
+        savedVendorIds={savedVendorIds}
+      />
     </main>
   );
 }

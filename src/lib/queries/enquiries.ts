@@ -29,6 +29,7 @@ export interface CreateEnquiryInput {
   eventDate: string;
   eventType: string;
   requirements: string;
+  userId?: string | null;
 }
 
 export async function createEnquiry(input: CreateEnquiryInput): Promise<{ id: string }> {
@@ -40,6 +41,7 @@ export async function createEnquiry(input: CreateEnquiryInput): Promise<{ id: st
       eventDate: input.eventDate,
       eventType: input.eventType,
       requirements: input.requirements,
+      userId: input.userId ?? null,
     },
     select: { id: true },
   });
