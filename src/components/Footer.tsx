@@ -217,20 +217,20 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} ShaadiSetu Media Pvt. Ltd. — Made
             with care in India.
           </p>
-          <div className="flex items-center gap-6 text-xs text-cream/50">
-            <Link href="/about" className="hover:text-champagne transition-colors">
+          <div className="flex items-center gap-x-6 gap-y-2 text-xs text-cream/50 flex-wrap justify-center md:justify-end">
+            <Link href="/privacy" className="hover:text-champagne transition-colors">
               Privacy
             </Link>
             <span className="block w-px h-3 bg-cream/15" />
-            <Link href="/about" className="hover:text-champagne transition-colors">
+            <Link href="/terms" className="hover:text-champagne transition-colors">
               Terms
             </Link>
             <span className="block w-px h-3 bg-cream/15" />
-            <Link href="/about" className="hover:text-champagne transition-colors">
+            <Link href="/refund" className="hover:text-champagne transition-colors">
               Refund Policy
             </Link>
             <span className="block w-px h-3 bg-cream/15" />
-            <Link href="/about" className="hover:text-champagne transition-colors">
+            <Link href="/cookies" className="hover:text-champagne transition-colors">
               Cookies
             </Link>
           </div>
