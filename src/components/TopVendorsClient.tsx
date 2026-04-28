@@ -18,7 +18,7 @@ function StarRating({ rating }: { rating: number }) {
         return (
           <svg
             key={star}
-            className={`w-3.5 h-3.5 ${filled || half ? "text-amber-400" : "text-gray-200"}`}
+            className={`w-3 h-3 ${filled || half ? "text-champagne" : "text-ink/15"}`}
             fill="currentColor"
             viewBox="0 0 20 20"
           >
@@ -34,17 +34,19 @@ export function TopVendorsClient({ vendors }: { vendors: VendorCard[] }) {
   const sectionRef = useScrollReveal<HTMLElement>();
 
   return (
-    <section ref={sectionRef} className="bg-white py-20 md:py-28">
+    <section ref={sectionRef} className="bg-cream-soft py-20 md:py-28 border-y border-ink/10">
       <div className="max-w-6xl mx-auto px-4">
         <div className="text-center mb-12 scroll-reveal">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-shaadi-rose mb-3">
-            Handpicked for You
+          <p className="text-[0.7rem] uppercase tracking-[0.28em] text-bordeaux mb-3">
+            Handpicked
           </p>
-          <h2 className="text-3xl md:text-4xl font-bold font-[family-name:var(--font-cormorant)] text-slate-900">
-            Our Top Trusted Vendors
+          <h2 className="font-serif-display text-3xl md:text-5xl text-ink leading-tight">
+            Our top trusted{" "}
+            <span className="italic text-bordeaux">vendors.</span>
           </h2>
-          <p className="mt-3 text-sm text-slate-500 max-w-xl mx-auto">
-            Verified professionals with outstanding reviews, handpicked by ShaadiSetu to make your wedding flawless.
+          <span className="block w-10 h-px bg-champagne mt-5 mx-auto" />
+          <p className="mt-5 text-sm text-ink-soft max-w-xl mx-auto font-light leading-relaxed">
+            Verified professionals with outstanding reviews — handpicked to make the day feel unhurried.
           </p>
         </div>
 
@@ -52,37 +54,37 @@ export function TopVendorsClient({ vendors }: { vendors: VendorCard[] }) {
           {vendors.map(({ vendor, categoryName }, i) => (
             <div
               key={vendor.id}
-              className="scroll-reveal group bg-white rounded-2xl border border-gray-100 overflow-hidden card-hover"
+              className="scroll-reveal group bg-cream border border-ink/10 overflow-hidden hover:border-bordeaux transition-colors"
               data-delay={i * 100}
             >
-              <div className="h-px bg-gradient-to-r from-shaadi-red via-shaadi-rose to-shaadi-pink" />
+              <div className="h-px bg-champagne/60" />
 
               <div className="p-6">
                 <div className="flex items-start gap-2 mb-3">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <h3 className="text-base font-bold text-slate-900 truncate">
+                      <h3 className="font-serif-display text-lg text-ink truncate leading-tight">
                         {vendor.name}
                       </h3>
-                      <svg className="w-4 h-4 text-blue-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <svg className="w-3.5 h-3.5 text-champagne flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                       </svg>
                     </div>
-                    <p className="text-xs text-slate-400 mt-0.5">{categoryName}</p>
+                    <p className="text-[0.6rem] uppercase tracking-[0.22em] text-ink-soft/70 mt-1">{categoryName}</p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2 mb-3">
                   <StarRating rating={vendor.rating} />
-                  <span className="text-sm font-bold text-slate-800">{vendor.rating}</span>
-                  <span className="text-xs text-slate-400">({vendor.reviewCount} reviews)</span>
+                  <span className="text-xs font-medium text-ink">{vendor.rating}</span>
+                  <span className="text-[0.65rem] text-ink-soft/70">· {vendor.reviewCount} reviews</span>
                 </div>
 
-                <p className="text-sm text-slate-500 leading-relaxed mb-3 line-clamp-2">
+                <p className="text-sm text-ink-soft leading-relaxed mb-4 line-clamp-2 font-light">
                   {vendor.description}
                 </p>
 
-                <div className="flex items-center gap-3 text-xs text-slate-400 mb-4">
+                <div className="flex items-center gap-3 text-[0.65rem] text-ink-soft/70 mb-4">
                   <span className="flex items-center gap-1">
                     <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -100,18 +102,25 @@ export function TopVendorsClient({ vendors }: { vendors: VendorCard[] }) {
 
                 <div className="flex flex-wrap gap-1.5 mb-4">
                   {vendor.tags.map((tag) => (
-                    <span key={tag} className="text-[11px] text-slate-500 bg-gray-50 px-2 py-0.5 rounded-md">
+                    <span key={tag} className="text-[0.6rem] uppercase tracking-[0.18em] text-ink-soft bg-cream-soft border border-ink/8 px-2 py-0.5">
                       {tag}
                     </span>
                   ))}
                 </div>
 
-                <div className="pt-3 border-t border-gray-50">
+                <div className="pt-3 border-t border-ink/8 flex items-center justify-between gap-3">
                   <Link
                     href={`/vendors/v/${vendor.id}`}
-                    className="block w-full text-center px-4 py-2.5 text-sm font-semibold text-white rounded-xl bg-gradient-to-r from-shaadi-red to-shaadi-rose hover:from-shaadi-deep hover:to-shaadi-red transition-all"
+                    className="text-[0.65rem] uppercase tracking-[0.22em] text-ink-soft hover:text-bordeaux transition-colors editorial-link"
                   >
-                    Send Enquiry
+                    View profile
+                  </Link>
+                  <Link
+                    href={`/vendors/v/${vendor.id}#enquire`}
+                    className="text-[0.65rem] uppercase tracking-[0.22em] font-medium text-bordeaux hover:text-ink transition-colors inline-flex items-center gap-1.5"
+                  >
+                    Enquire
+                    <span aria-hidden className="transition-transform group-hover:translate-x-0.5">→</span>
                   </Link>
                 </div>
               </div>
@@ -122,11 +131,11 @@ export function TopVendorsClient({ vendors }: { vendors: VendorCard[] }) {
         <div className="mt-12 text-center scroll-reveal" data-delay="200">
           <Link
             href="/vendors"
-            className="btn-arrow inline-flex items-center gap-2 px-7 py-3 text-sm font-semibold text-shaadi-red border-2 border-shaadi-red rounded-full hover:bg-shaadi-red hover:text-white transition-colors"
+            className="btn-arrow inline-flex items-center gap-2 text-[0.7rem] uppercase tracking-[0.24em] font-medium text-ink hover:text-bordeaux transition-colors editorial-link"
           >
-            View All Vendors
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            View all vendors
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
           </Link>
         </div>
