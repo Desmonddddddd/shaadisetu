@@ -42,23 +42,24 @@ export function applyFilters(vendors: Vendor[], f: FilterState): Vendor[] {
   }
   if (f.budget) out = out.filter((v) => v.priceRange === f.budget);
 
-  // Booked vendors sort to bottom (not removed) when date is set
-  if (f.date) {
-    out.sort((a, b) => Number(isBooked(a.id, f.date!)) - Number(isBooked(b.id, f.date!)));
-  }
+  // Build the secondary comparator from the chosen sort key.
+  const secondary = (() => {
+    switch (f.sort) {
+      case "rating":     return (a: Vendor, b: Vendor) => b.rating - a.rating;
+      case "price-asc":  return (a: Vendor, b: Vendor) => parseLow(a.priceRange) - parseLow(b.priceRange);
+      case "price-desc": return (a: Vendor, b: Vendor) => parseLow(b.priceRange) - parseLow(a.priceRange);
+      default:           return (a: Vendor, b: Vendor) => b.reviewCount - a.reviewCount;
+    }
+  })();
 
-  switch (f.sort) {
-    case "rating":
-      out.sort((a, b) => b.rating - a.rating);
-      break;
-    case "price-asc":
-      out.sort((a, b) => parseLow(a.priceRange) - parseLow(b.priceRange));
-      break;
-    case "price-desc":
-      out.sort((a, b) => parseLow(b.priceRange) - parseLow(a.priceRange));
-      break;
-    default:
-      out.sort((a, b) => b.reviewCount - a.reviewCount);
+  if (f.date) {
+    const date = f.date;
+    out.sort((a, b) => {
+      const bookedDelta = Number(isBooked(a.id, date)) - Number(isBooked(b.id, date));
+      return bookedDelta !== 0 ? bookedDelta : secondary(a, b);
+    });
+  } else {
+    out.sort(secondary);
   }
   return out;
 }
