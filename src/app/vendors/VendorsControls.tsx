@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useTransition, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { FilterPills } from "@/components/editorial/FilterPills";
+import { SearchSelect } from "@/components/editorial/SearchSelect";
 
 interface City {
   id: string;
@@ -90,20 +90,24 @@ export function VendorsControls({
         )}
       </div>
 
-      <FilterPills
-        label="City"
-        options={cityOptions}
-        value={city}
-        onChange={setCity}
-        allLabel="All Cities"
-      />
-      <FilterPills
-        label="Category"
-        options={categoryOptions}
-        value={category}
-        onChange={setCategory}
-        allLabel="All Categories"
-      />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <SearchSelect
+          label="City"
+          placeholder="All cities"
+          options={cityOptions}
+          value={city}
+          onChange={setCity}
+          allLabel="All Cities"
+        />
+        <SearchSelect
+          label="Category"
+          placeholder="All categories"
+          options={categoryOptions}
+          value={category}
+          onChange={setCategory}
+          allLabel="All Categories"
+        />
+      </div>
 
       <div className="flex items-center justify-between pt-2 border-t border-ink/10">
         <p className="text-[0.7rem] uppercase tracking-[0.22em] text-ink-soft">
