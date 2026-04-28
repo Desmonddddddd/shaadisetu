@@ -114,6 +114,39 @@ function loadInitialMessages(): ChatMessage[] {
   return [WELCOME_MESSAGE];
 }
 
+// Inspect the page behind the launcher and decide whether the button needs
+// the light or dark variant. We hide the button briefly, sample the element
+// at its centre, and walk up the tree until we find a non-transparent
+// background. Cheap enough to run on every scroll/resize tick.
+function detectBackdropTone(buttonEl: HTMLElement): "light" | "dark" {
+  const rect = buttonEl.getBoundingClientRect();
+  const x = rect.left + rect.width / 2;
+  const y = rect.top + rect.height / 2;
+
+  const prevPointer = buttonEl.style.pointerEvents;
+  buttonEl.style.pointerEvents = "none";
+  const target = document.elementFromPoint(x, y);
+  buttonEl.style.pointerEvents = prevPointer;
+  if (!target) return "light";
+
+  let el: Element | null = target;
+  while (el && el !== document.body) {
+    const bg = window.getComputedStyle(el).backgroundColor;
+    if (bg && bg !== "rgba(0, 0, 0, 0)" && bg !== "transparent") {
+      // Parse rgb(a) and compute perceived luminance.
+      const m = bg.match(/rgba?\(([^)]+)\)/);
+      if (!m) return "light";
+      const parts = m[1].split(",").map((s) => parseFloat(s.trim()));
+      const [r, g, b] = parts;
+      // ITU-R BT.601 luma. Treat <140 as dark.
+      const luma = 0.299 * r + 0.587 * g + 0.114 * b;
+      return luma < 140 ? "dark" : "light";
+    }
+    el = el.parentElement;
+  }
+  return "light";
+}
+
 export default function SaathiChat() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>(loadInitialMessages);
@@ -121,8 +154,10 @@ export default function SaathiChat() {
   const [streaming, setStreaming] = useState(false);
   const [streamingText, setStreamingText] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [backdrop, setBackdrop] = useState<"light" | "dark">("light");
   const scrollRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
+  const launcherRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     try {
@@ -147,6 +182,33 @@ export default function SaathiChat() {
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
+  }, [open]);
+
+  // Sample the background behind the launcher on scroll and resize, then
+  // flip between the dark-bg and light-bg variants so the pill always reads.
+  // Throttled with rAF — sampling on every scroll event would thrash layout.
+  useEffect(() => {
+    if (open) return; // panel covers the launcher; no need to sample
+    let frame = 0;
+    const sample = () => {
+      frame = 0;
+      const btn = launcherRef.current;
+      if (!btn) return;
+      const tone = detectBackdropTone(btn);
+      setBackdrop((prev) => (prev === tone ? prev : tone));
+    };
+    const schedule = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(sample);
+    };
+    sample();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    return () => {
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
   }, [open]);
 
   const send = useCallback(async () => {
@@ -251,14 +313,24 @@ export default function SaathiChat() {
 
   return (
     <>
-      {/* Floating launcher */}
+      {/* Floating launcher — flips between dark- and light-backdrop variants
+          based on the page colour right behind it. */}
       <button
+        ref={launcherRef}
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-label={open ? "Close SAATHI" : "Open SAATHI"}
-        className="fixed bottom-5 right-5 z-[55] flex items-center gap-2 px-4 py-3 bg-ink text-cream shadow-[0_18px_40px_-12px_rgba(0,0,0,0.45)] hover:bg-bordeaux transition-colors group"
+        className={`fixed bottom-8 right-5 z-[55] flex items-center gap-2 px-4 py-3 transition-colors duration-300 group ${
+          backdrop === "dark"
+            ? "bg-cream text-ink hover:bg-champagne shadow-[0_18px_40px_-12px_rgba(0,0,0,0.55)]"
+            : "bg-ink text-cream hover:bg-bordeaux shadow-[0_18px_40px_-12px_rgba(0,0,0,0.35)]"
+        }`}
       >
-        <span className="block w-2 h-2 rounded-full bg-champagne animate-pulse" />
+        <span
+          className={`block w-2 h-2 rounded-full animate-pulse ${
+            backdrop === "dark" ? "bg-bordeaux" : "bg-champagne"
+          }`}
+        />
         <span className="text-[0.7rem] uppercase tracking-[0.22em] font-medium">
           {open ? "Close" : "Ask SAATHI"}
         </span>
@@ -266,7 +338,7 @@ export default function SaathiChat() {
 
       {/* Panel */}
       {open && (
-        <div className="fixed bottom-20 right-5 z-[56] w-[calc(100vw-2.5rem)] sm:w-[420px] max-h-[min(640px,calc(100vh-7rem))] bg-cream border border-ink/15 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.4)] flex flex-col animate-[fade-up_240ms_ease-out]">
+        <div className="fixed bottom-24 right-5 z-[56] w-[calc(100vw-2.5rem)] sm:w-[420px] max-h-[min(640px,calc(100vh-8rem))] bg-cream border border-ink/15 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.4)] flex flex-col animate-[fade-up_240ms_ease-out]">
           {/* Header */}
           <div className="bg-ink text-cream px-5 py-3 flex items-center justify-between flex-shrink-0">
             <div>
