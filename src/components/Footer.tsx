@@ -1,4 +1,5 @@
 import Link from "next/link";
+import CuratedRequestButton from "@/components/CuratedRequestButton";
 
 const COLUMNS = [
   {
@@ -188,21 +189,24 @@ export default function Footer() {
         </div>
 
         {/* Curated-request strip */}
-        <div className="mt-14 pt-10 border-t border-cream/10">
-          <p className="text-[0.7rem] uppercase tracking-[0.24em] text-champagne mb-3">
-            Looking for something specific?
-          </p>
-          <p className="text-sm md:text-base text-cream/75 font-light leading-relaxed max-w-2xl">
-            Need something specially curated for you that isn&rsquo;t mentioned
-            here? Send us an email at{" "}
-            <a
-              href="mailto:hello@shaadisetu.com"
-              className="text-champagne hover:text-cream editorial-link"
-            >
-              hello@shaadisetu.com
-            </a>{" "}
-            and we&rsquo;ll put together a shortlist by hand.
-          </p>
+        <div className="mt-14 pt-10 border-t border-cream/10 grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+          <div className="md:col-span-7">
+            <p className="text-[0.7rem] uppercase tracking-[0.24em] text-champagne mb-3">
+              Looking for something special?
+            </p>
+            <h4 className="font-serif-display text-2xl md:text-3xl text-cream leading-tight">
+              Drop us a line and we&rsquo;ll{" "}
+              <span className="italic text-champagne">source it for you</span>,
+              by hand.
+            </h4>
+            <p className="mt-2 text-sm text-cream/60 font-light max-w-md">
+              Tell us what you have in mind. We come back within 48 hours with a
+              hand-picked shortlist.
+            </p>
+          </div>
+          <div className="md:col-span-5 md:justify-self-end">
+            <CuratedRequestButton />
+          </div>
         </div>
       </div>
 
