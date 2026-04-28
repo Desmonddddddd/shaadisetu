@@ -323,6 +323,15 @@ body {
 .hero-delay-2 { animation-delay: 150ms; }
 .hero-delay-3 { animation-delay: 300ms; }
 .hero-delay-4 { animation-delay: 450ms; }
+
+@keyframes hero-pan {
+  0% {
+    transform: scale(1.1) translate(0, 0);
+  }
+  100% {
+    transform: scale(1.15) translate(-2%, -1%);
+  }
+}
 .hero-delay-5 { animation-delay: 600ms; }
 
 /* ─── Card hover ─── */

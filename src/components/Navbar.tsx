@@ -33,13 +33,15 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-8">
+          <nav className="hidden md:flex items-center gap-6 lg:gap-7">
             {[
-              { label: "About", href: "/about" },
               { label: "Vendors", href: "/vendors" },
               { label: "Planning", href: "/plan" },
               { label: "Functions", href: "/functions" },
+              { label: "ShaadiWall", href: "/wall" },
+              { label: "Finance", href: "/finance" },
               { label: "Diaries", href: "/client-diaries" },
+              { label: "About", href: "/about" },
             ].map((link) => (
               <Link
                 key={link.href}
