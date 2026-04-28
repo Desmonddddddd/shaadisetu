@@ -320,7 +320,7 @@ export default function SaathiChat() {
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-label={open ? "Close SAATHI" : "Open SAATHI"}
-        className={`fixed bottom-8 right-5 z-[55] flex items-center gap-2 px-4 py-3 transition-colors duration-300 group ${
+        className={`fixed bottom-24 right-5 z-[55] flex items-center gap-2 px-4 py-3 transition-colors duration-300 group ${
           backdrop === "dark"
             ? "bg-cream text-ink hover:bg-champagne shadow-[0_18px_40px_-12px_rgba(0,0,0,0.55)]"
             : "bg-ink text-cream hover:bg-bordeaux shadow-[0_18px_40px_-12px_rgba(0,0,0,0.35)]"
@@ -338,7 +338,7 @@ export default function SaathiChat() {
 
       {/* Panel */}
       {open && (
-        <div className="fixed bottom-24 right-5 z-[56] w-[calc(100vw-2.5rem)] sm:w-[420px] max-h-[min(640px,calc(100vh-8rem))] bg-cream border border-ink/15 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.4)] flex flex-col animate-[fade-up_240ms_ease-out]">
+        <div className="fixed bottom-40 right-5 z-[56] w-[calc(100vw-2.5rem)] sm:w-[420px] max-h-[min(640px,calc(100vh-12rem))] bg-cream border border-ink/15 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.4)] flex flex-col animate-[fade-up_240ms_ease-out]">
           {/* Header */}
           <div className="bg-ink text-cream px-5 py-3 flex items-center justify-between flex-shrink-0">
             <div>
