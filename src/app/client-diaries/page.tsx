@@ -121,7 +121,7 @@ export default async function ClientDiariesPage() {
                 <article className="editorial-card group h-full overflow-hidden flex flex-col">
                   <div className="relative aspect-[16/10] overflow-hidden">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
+                    <img loading="lazy" decoding="async"
                       src={s.cover}
                       alt={s.title}
                       className="w-full h-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.06]"

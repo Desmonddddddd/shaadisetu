@@ -34,7 +34,7 @@ export const diaryStories: DiaryStory[] = [
     month: "February 2026",
     emoji: "🌊",
     cover:
-      "https://images.unsplash.com/photo-1465495976277-4387d4b0e4a6?w=1600&q=80",
+      "https://images.unsplash.com/photo-1525772764200-be829a350797?w=1600&q=80",
     title: "She planned it from San Francisco. He wore sneakers under the sherwani.",
     excerpt:
       "Twelve time zones, six WhatsApp groups, and not a single shouting match.",

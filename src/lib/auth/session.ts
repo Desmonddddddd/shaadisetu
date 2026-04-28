@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { auth } from "./auth";
 import { db } from "@/lib/db";
 
@@ -61,4 +62,20 @@ export async function getOptionalUserSession(): Promise<{
   const account = await db.userAccount.findUnique({ where: { id: u.id } });
   if (!account) return null;
   return { userId: account.id, email: account.email, name: account.name };
+}
+
+/**
+ * For protected user pages: bounce unauthenticated visitors to the login
+ * screen instead of throwing. Defense-in-depth in case middleware fails open.
+ */
+export async function getUserSessionOrRedirect(): Promise<{
+  userId: string;
+  email: string;
+}> {
+  const session = await auth();
+  const u = session?.user as SessionUser | undefined;
+  if (!u?.id || u.kind !== "user") redirect("/account/login");
+  const account = await db.userAccount.findUnique({ where: { id: u.id } });
+  if (!account) redirect("/account/login");
+  return { userId: account.id, email: account.email };
 }

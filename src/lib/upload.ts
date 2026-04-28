@@ -6,7 +6,7 @@
 
 const STUB_POOL = [
   "https://images.unsplash.com/photo-1519741497674-611481863552?w=1200",
-  "https://images.unsplash.com/photo-1465495976277-4387d4b0e4a6?w=1200",
+  "https://images.unsplash.com/photo-1525772764200-be829a350797?w=1200",
   "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=1200",
   "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=1200",
   "https://images.unsplash.com/photo-1520854221256-17451cc331bf?w=1200",

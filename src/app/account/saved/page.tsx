@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { requireUserSession } from "@/lib/auth/session";
+import { getUserSessionOrRedirect } from "@/lib/auth/session";
 import { getSavedVendors } from "@/lib/queries/saved";
 
 export const dynamic = "force-dynamic";
 
 export default async function SavedVendorsPage() {
-  const { userId } = await requireUserSession();
+  const { userId } = await getUserSessionOrRedirect();
   const items = await getSavedVendors(userId);
 
   return (

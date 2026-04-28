@@ -5,8 +5,19 @@ import { Prisma } from "@/generated/prisma";
 import { db } from "@/lib/db";
 import { sendNewEnquiryEmail } from "@/lib/email";
 import { getOptionalUserSession } from "@/lib/auth/session";
+import { rateLimit, getClientIp } from "@/lib/rateLimit";
 
 export async function POST(request: Request) {
+  // 5 enquiries per IP per 5 minutes — generous for legitimate users,
+  // tight enough to make spam unattractive.
+  const limit = rateLimit(`${getClientIp(request)}:enquiry`, 5, 5 * 60 * 1000);
+  if (!limit.allowed) {
+    return NextResponse.json(
+      { ok: false, error: "Too many enquiries. Try again in a few minutes." },
+      { status: 429, headers: { "Retry-After": String(Math.ceil((limit.resetAt - Date.now()) / 1000)) } },
+    );
+  }
+
   let body: unknown;
   try {
     body = await request.json();

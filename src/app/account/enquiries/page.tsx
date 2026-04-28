@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { requireUserSession } from "@/lib/auth/session";
+import { getUserSessionOrRedirect } from "@/lib/auth/session";
 import { getUserEnquiries } from "@/lib/queries/saved";
 
 export const dynamic = "force-dynamic";
@@ -19,7 +19,7 @@ const STATUS_STYLES: Record<string, string> = {
 };
 
 export default async function MyEnquiriesPage() {
-  const { userId } = await requireUserSession();
+  const { userId } = await getUserSessionOrRedirect();
   const enquiries = await getUserEnquiries(userId);
 
   return (

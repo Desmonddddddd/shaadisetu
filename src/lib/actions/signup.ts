@@ -4,11 +4,16 @@ import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { signIn } from "@/lib/auth/auth";
+import { rateLimit } from "@/lib/rateLimit";
 
 const signupSchema = z
   .object({
-    email: z.string().email("Enter a valid email"),
-    password: z.string().min(8, "Min 8 characters").regex(/\d/, "Must include a number"),
+    email: z.string().trim().toLowerCase().email("Enter a valid email").max(254),
+    password: z
+      .string()
+      .min(8, "Min 8 characters")
+      .max(72, "Max 72 characters")
+      .regex(/\d/, "Must include a number"),
     confirmPassword: z.string(),
   })
   .refine((d) => d.password === d.confirmPassword, {
@@ -28,6 +33,10 @@ export async function signupVendor(input: {
   const parsed = signupSchema.safeParse(input);
   if (!parsed.success) {
     return { ok: false, error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  }
+  const limit = rateLimit(`vendor-signup:${parsed.data.email}`, 5, 60 * 60 * 1000);
+  if (!limit.allowed) {
+    return { ok: false, error: "Too many attempts. Try again later." };
   }
   const existing = await db.vendorAccount.findUnique({
     where: { email: parsed.data.email },

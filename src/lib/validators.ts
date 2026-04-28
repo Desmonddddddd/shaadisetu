@@ -14,8 +14,8 @@ export const eventTypeSchema = z.enum([
 ]);
 
 export const enquirySchema = z.object({
-  vendorId: z.string().min(1),
-  name: z.string().min(2, "Name is too short"),
+  vendorId: z.string().min(1).max(80),
+  name: z.string().trim().min(2, "Name is too short").max(80),
   phone: phoneSchema,
   eventDate: z
     .string()
@@ -23,7 +23,11 @@ export const enquirySchema = z.object({
       message: "Pick a future date",
     }),
   eventType: eventTypeSchema,
-  requirements: z.string().min(10, "Tell us a bit more (min 10 chars)"),
+  requirements: z
+    .string()
+    .trim()
+    .min(10, "Tell us a bit more (min 10 chars)")
+    .max(2000, "Keep it under 2000 characters"),
 });
 
 export type EnquiryInput = z.infer<typeof enquirySchema>;

@@ -6,11 +6,15 @@ import { db } from "@/lib/db";
 import { requireVendorSession } from "@/lib/auth/session";
 
 const profileSchema = z.object({
-  name: z.string().min(2, "Name too short"),
-  description: z.string().min(20, "Tell couples more about your work"),
-  priceRange: z.string().min(1),
-  tags: z.array(z.string()).max(10, "Max 10 tags"),
-  cityId: z.string().min(1),
+  name: z.string().trim().min(2, "Name too short").max(120, "Name too long"),
+  description: z
+    .string()
+    .trim()
+    .min(20, "Tell couples more about your work")
+    .max(4000, "Keep the description under 4000 characters"),
+  priceRange: z.string().trim().min(1).max(60),
+  tags: z.array(z.string().trim().min(1).max(40)).max(10, "Max 10 tags"),
+  cityId: z.string().min(1).max(80),
 });
 
 export type ProfileInput = z.infer<typeof profileSchema>;
@@ -25,6 +29,15 @@ export async function updateVendorProfile(input: ProfileInput): Promise<ProfileR
     return { ok: false, error: parsed.error.issues[0]?.message ?? "Invalid input" };
   }
   const { vendorId } = await requireVendorSession();
+  // Validate cityId points at a real city — surfaces a clean error instead
+  // of letting the FK fail at write time.
+  const cityExists = await db.city.findUnique({
+    where: { id: parsed.data.cityId },
+    select: { id: true },
+  });
+  if (!cityExists) {
+    return { ok: false, error: "Pick a city from the list" };
+  }
   await db.vendor.update({
     where: { id: vendorId },
     data: {

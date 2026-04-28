@@ -6,10 +6,10 @@ import { db } from "@/lib/db";
 import { requireVendorSession } from "@/lib/auth/session";
 
 const packageSchema = z.object({
-  tier: z.string().min(1),
-  name: z.string().min(2),
-  price: z.coerce.number().int().positive(),
-  features: z.array(z.string()).max(20),
+  tier: z.string().trim().min(1).max(40),
+  name: z.string().trim().min(2).max(120),
+  price: z.coerce.number().int().positive().max(1_000_000_000),
+  features: z.array(z.string().trim().min(1).max(200)).max(20),
   popular: z.boolean().optional(),
 });
 

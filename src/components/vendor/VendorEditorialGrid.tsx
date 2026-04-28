@@ -51,7 +51,7 @@ function VendorEditorialCard({ vendor, index }: { vendor: Vendor; index: number 
       <Link href={`/vendors/v/${vendor.id}`} className="block relative overflow-hidden aspect-[16/9]">
         {vendor.coverImage ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img
+          <img loading="lazy" decoding="async"
             src={vendor.coverImage}
             alt={vendor.name}
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"

@@ -17,7 +17,7 @@ export default function AboutPage() {
           className="absolute inset-0 bg-cover bg-center"
           style={{
             backgroundImage:
-              "url('https://images.unsplash.com/photo-1465495976277-4387d4b0e4a6?w=2400&q=80')",
+              "url('https://images.unsplash.com/photo-1525772764200-be829a350797?w=2400&q=80')",
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-ink/75 via-ink/55 to-ink/85" />

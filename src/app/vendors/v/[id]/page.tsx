@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { getVendorProfile } from "@/lib/queries/vendors";
 import { getOptionalUserSession } from "@/lib/auth/session";
 import { isVendorSaved } from "@/lib/queries/saved";
@@ -9,6 +10,20 @@ import { VendorAvailabilityCalendar } from "@/components/vendor/VendorAvailabili
 import { VendorReviews } from "@/components/vendor/VendorReviews";
 import { VendorEnquiryRail } from "@/components/vendor/VendorEnquiryRail";
 import { VendorServicesList } from "@/components/vendor/VendorServicesList";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const vendor = await getVendorProfile(id);
+  if (!vendor) return { title: "Vendor — ShaadiSetu" };
+  return {
+    title: `${vendor.name} — ShaadiSetu`,
+    description: vendor.description.slice(0, 160),
+  };
+}
 
 export default async function VendorProfile({
   params,
