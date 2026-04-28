@@ -1,11 +1,14 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { getOptionalUserSession } from "@/lib/auth/session";
 import { signOut } from "@/lib/auth/auth";
 
 export default async function AccountLayout({ children }: { children: React.ReactNode }) {
   const sess = await getOptionalUserSession();
-  if (!sess) redirect("/account/login");
+
+  if (!sess) {
+    // Public account pages (login, signup) render without sidebar/auth.
+    return <>{children}</>;
+  }
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-6 grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6">
