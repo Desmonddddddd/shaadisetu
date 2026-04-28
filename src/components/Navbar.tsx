@@ -4,7 +4,11 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import MobileMenu from "./MobileMenu";
 
-export default function Navbar() {
+interface NavbarProps {
+  userInitials?: string | null;
+}
+
+export default function Navbar({ userInitials }: NavbarProps = {}) {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -39,6 +43,7 @@ export default function Navbar() {
               { label: "Planning", href: "/plan" },
               { label: "Functions", href: "/functions" },
               { label: "ShaadiWall", href: "/wall" },
+              { label: "Astro", href: "/astro" },
               { label: "Finance", href: "/finance" },
               { label: "About", href: "/about" },
             ].map((link) => (
@@ -62,13 +67,19 @@ export default function Navbar() {
             </Link>
             <span className="block w-px h-5 bg-ink/15" />
             <Link
-              href="/welcome"
-              aria-label="Sign in or join"
+              href={userInitials ? "/account" : "/welcome"}
+              aria-label={userInitials ? "Your account" : "Sign in or join"}
               className="w-9 h-9 flex items-center justify-center bg-ink text-cream hover:bg-bordeaux transition-colors"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.8}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.5 20.118a7.5 7.5 0 0 1 15 0A17.93 17.93 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-              </svg>
+              {userInitials ? (
+                <span className="text-[0.72rem] font-semibold tracking-[0.06em] uppercase">
+                  {userInitials}
+                </span>
+              ) : (
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.8}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.5 20.118a7.5 7.5 0 0 1 15 0A17.93 17.93 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                </svg>
+              )}
             </Link>
           </div>
 

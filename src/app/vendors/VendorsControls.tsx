@@ -65,16 +65,38 @@ export function VendorsControls({
   const hasFilters = q.trim().length > 0 || city !== "" || category !== "";
 
   return (
-    <div className="space-y-7 fade-up stagger-1">
-      <div className="flex items-center gap-3">
-        <SearchIcon />
-        <input
-          type="text"
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          placeholder="Search photographers, decor, venues, names…"
-          className="editorial-input flex-1"
-        />
+    <div className="fade-up stagger-1">
+      <div className="flex flex-col lg:flex-row lg:items-center gap-3">
+        <div className="flex items-center gap-3 flex-1 min-w-0 border-b lg:border-b-0 lg:border-r border-ink/10 pb-3 lg:pb-0 lg:pr-4">
+          <SearchIcon />
+          <input
+            type="text"
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="Search photographers, decor, venues, names…"
+            className="editorial-input flex-1 min-w-0"
+          />
+        </div>
+
+        <div className="grid grid-cols-2 gap-3 lg:flex lg:items-center lg:gap-3 lg:shrink-0">
+          <SearchSelect
+            label="City"
+            placeholder="All cities"
+            options={cityOptions}
+            value={city}
+            onChange={setCity}
+            allLabel="All Cities"
+          />
+          <SearchSelect
+            label="Category"
+            placeholder="All categories"
+            options={categoryOptions}
+            value={category}
+            onChange={setCategory}
+            allLabel="All Categories"
+          />
+        </div>
+
         {hasFilters && (
           <button
             type="button"
@@ -83,48 +105,27 @@ export function VendorsControls({
               setCity("");
               setCategory("");
             }}
-            className="text-[0.65rem] uppercase tracking-[0.2em] text-bordeaux hover:text-ink transition-colors"
+            className="text-[0.65rem] uppercase tracking-[0.2em] text-bordeaux hover:text-ink transition-colors lg:shrink-0 self-start lg:self-center"
           >
             Clear
           </button>
         )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <SearchSelect
-          label="City"
-          placeholder="All cities"
-          options={cityOptions}
-          value={city}
-          onChange={setCity}
-          allLabel="All Cities"
-        />
-        <SearchSelect
-          label="Category"
-          placeholder="All categories"
-          options={categoryOptions}
-          value={category}
-          onChange={setCategory}
-          allLabel="All Categories"
-        />
-      </div>
-
-      <div className="flex items-center justify-between pt-2 border-t border-ink/10">
-        <p className="text-[0.7rem] uppercase tracking-[0.22em] text-ink-soft">
-          {isPending ? (
-            <span className="inline-flex items-center gap-2">
-              <span className="w-1 h-1 rounded-full bg-champagne animate-pulse" />
-              Refining…
+      <div className="mt-4 flex items-center gap-2">
+        {isPending ? (
+          <span className="inline-flex items-center gap-2 text-[0.65rem] uppercase tracking-[0.22em] text-ink-soft">
+            <span className="w-1 h-1 rounded-full bg-champagne animate-pulse" />
+            Refining…
+          </span>
+        ) : (
+          <span className="text-[0.65rem] uppercase tracking-[0.22em] text-ink-soft inline-flex items-baseline gap-2">
+            <span className="font-serif-display text-bordeaux normal-case tracking-normal text-base">
+              {totalCount}
             </span>
-          ) : (
-            <span>
-              <span className="font-serif-display text-bordeaux normal-case tracking-normal text-base mr-2">
-                {totalCount}
-              </span>
-              {totalCount === 1 ? "Vendor" : "Vendors"} matching
-            </span>
-          )}
-        </p>
+            {totalCount === 1 ? "Vendor" : "Vendors"} matching
+          </span>
+        )}
       </div>
     </div>
   );

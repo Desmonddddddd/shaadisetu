@@ -185,3 +185,23 @@ model Enquiry {
 
   @@index([vendorId, createdAt])
 }
+
+model AstroLead {
+  id        String   @id @default(cuid())
+  email     String
+  name      String
+  source    String
+  dob1      String
+  place1    String
+  tob1      String?
+  gender1   String?
+  dob2      String?
+  place2    String?
+  tob2      String?
+  gender2   String?
+  userId    String?
+  createdAt DateTime @default(now())
+
+  @@index([email])
+  @@index([source, createdAt])
+}

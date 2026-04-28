@@ -43,6 +43,16 @@ const paths: Path[] = [
     cover:
       "https://images.unsplash.com/photo-1525772764200-be829a350797?w=1600&q=80",
   },
+  {
+    number: "04",
+    eyebrow: "Kundli & Astro",
+    title: "Match the stars",
+    description:
+      "Vedic Guna Milan compatibility and personal birth-chart readings — computed traditionally, explained in plain English.",
+    href: "/astro",
+    cover:
+      "https://images.unsplash.com/photo-1532009877282-3340270e0529?w=1600&q=80",
+  },
 ];
 
 export default function EntryPaths() {
@@ -54,19 +64,19 @@ export default function EntryPaths() {
         {/* Section header */}
         <div className="text-center mb-14 scroll-reveal">
           <p className="eyebrow">
-            <span className="eyebrow-num">01</span>Three Doors In
+            <span className="eyebrow-num">01</span>Four Doors In
           </p>
           <h2 className="font-serif-display text-4xl md:text-5xl text-ink mt-4 leading-tight">
             How would you like to <em className="italic text-bordeaux">begin?</em>
           </h2>
           <div className="gold-rule w-32 mx-auto mt-6" />
           <p className="mt-6 text-ink-soft text-sm md:text-base font-light max-w-md mx-auto leading-relaxed">
-            Three paths into the same directory. Pick the one that fits your
+            Four paths into the same directory. Pick the one that fits your
             mood today. Switch any time.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
           {paths.map((path, i) => (
             <Link
               key={path.href}
