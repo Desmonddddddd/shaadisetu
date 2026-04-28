@@ -17,10 +17,19 @@ export function VendorRowCard({ vendor, isAuthed = false, initialSaved = false }
   return (
     <article className="grid grid-cols-[80px_1fr_auto] gap-4 p-4 bg-white border border-gray-200 rounded-xl hover:shadow-md transition-shadow">
       <Link href={`/vendors/v/${vendor.id}`} className="block">
-        <div
-          className="w-20 h-20 rounded-lg bg-gradient-to-br from-shaadi-light to-shaadi-rose"
-          aria-hidden
-        />
+        {vendor.coverImage ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={vendor.coverImage}
+            alt={vendor.name}
+            className="w-20 h-20 rounded-lg object-cover"
+          />
+        ) : (
+          <div
+            className="w-20 h-20 rounded-lg bg-gradient-to-br from-shaadi-light to-shaadi-rose"
+            aria-hidden
+          />
+        )}
       </Link>
 
       <div className="min-w-0">

@@ -55,6 +55,7 @@ model Vendor {
   tags            String
   email           String?          @unique
   moderationState String           @default("live")
+  coverImage      String?
   searchVector    Unsupported("tsvector")?
   packages        Package[]
   portfolio       PortfolioImage[]

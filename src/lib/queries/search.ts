@@ -24,6 +24,7 @@ interface RawRow {
   tags: string;
   email: string | null;
   moderationState: string;
+  coverImage: string | null;
   createdAt: Date;
   updatedAt: Date;
   cityName: string;
@@ -81,7 +82,7 @@ export async function searchVendors(params: SearchParams): Promise<Vendor[]> {
     SELECT
       v."id", v."name", v."description", v."cityId", v."categoryId",
       v."rating", v."reviewCount", v."priceRange", v."yearsExperience",
-      v."verified", v."tags", v."email", v."moderationState",
+      v."verified", v."tags", v."email", v."moderationState", v."coverImage",
       v."createdAt", v."updatedAt",
       c."name" AS "cityName",
       ${rankExpr} AS "rank"
@@ -107,6 +108,7 @@ export async function searchVendors(params: SearchParams): Promise<Vendor[]> {
     tags: decodeTags(r.tags),
     email: r.email,
     moderationState: r.moderationState,
+    coverImage: r.coverImage,
     createdAt: r.createdAt,
     updatedAt: r.updatedAt,
     city: { name: r.cityName },

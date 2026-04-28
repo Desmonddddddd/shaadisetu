@@ -15,6 +15,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
         <NavLink href="/vendor/dashboard">Overview</NavLink>
         <NavLink href="/vendor/dashboard/enquiries">Enquiries</NavLink>
         <NavLink href="/vendor/dashboard/profile">Profile</NavLink>
+        <NavLink href="/vendor/dashboard/portfolio">Portfolio</NavLink>
         <NavLink href="/vendor/dashboard/packages">Packages</NavLink>
         <form
           action={async () => {

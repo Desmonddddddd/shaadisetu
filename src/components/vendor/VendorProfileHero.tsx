@@ -15,8 +15,19 @@ export function VendorProfileHero({
   initialSaved = false,
 }: Props) {
   return (
-    <header className="bg-gradient-to-br from-shaadi-light via-shaadi-rose to-shaadi-deep text-white p-6 rounded-2xl">
-      <div className="flex items-start justify-between gap-4">
+    <header
+      className="relative overflow-hidden bg-gradient-to-br from-shaadi-light via-shaadi-rose to-shaadi-deep text-white p-6 rounded-2xl"
+      style={
+        vendor.coverImage
+          ? {
+              backgroundImage: `linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.65)), url("${vendor.coverImage}")`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }
+          : undefined
+      }
+    >
+      <div className="relative flex items-start justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold">
             {vendor.name}{" "}
