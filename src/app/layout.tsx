@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Cormorant_Garamond } from "next/font/google";
 import { CityProvider } from "@/context/CityContext";
 import { CompareProvider } from "@/context/CompareContext";
+import { CompareTray } from "@/components/compare/CompareTray";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import "./globals.css";
@@ -28,6 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Navbar />
             <main className="min-h-screen">{children}</main>
             <Footer />
+            <CompareTray />
           </CompareProvider>
         </CityProvider>
       </body>

@@ -34,9 +34,17 @@ function safeWrite(ids: string[]) {
 }
 
 export function CompareProvider({ children }: { children: ReactNode }) {
-  const [ids, setIds] = useState<string[]>(() => safeRead());
+  const [ids, setIds] = useState<string[]>([]);
+  const [hydrated, setHydrated] = useState(false);
 
-  useEffect(() => safeWrite(ids), [ids]);
+  useEffect(() => {
+    setIds(safeRead());
+    setHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (hydrated) safeWrite(ids);
+  }, [ids, hydrated]);
 
   const add = useCallback((id: string): boolean => {
     let added = false;
