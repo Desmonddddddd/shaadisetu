@@ -227,7 +227,9 @@ body {
 /* Gold underline animated link */
 .editorial-link {
   position: relative;
-  color: #1a1a1a;
+  /* Inherit from caller so the same class works on light and dark backgrounds.
+     Anywhere it needs to override, put a text-* utility on the element. */
+  color: inherit;
 }
 
 .editorial-link::after {
