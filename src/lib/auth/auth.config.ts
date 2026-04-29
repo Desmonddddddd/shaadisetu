@@ -4,7 +4,7 @@ import type { NextAuthConfig } from "next-auth";
 // The full config in auth.ts extends this with the Credentials provider.
 export const authConfig = {
   session: { strategy: "jwt" },
-  pages: { signIn: "/vendor/login" },
+  pages: { signIn: "/account/login" },
   providers: [],
   callbacks: {
     async jwt({ token, user }) {
@@ -19,7 +19,8 @@ export const authConfig = {
     },
     authorized({ auth, request }) {
       const { pathname } = request.nextUrl;
-      if (pathname.startsWith("/vendor/dashboard")) return !!auth;
+      // /vendor/dashboard does its own redirect to /vendor/login in its layout;
+      // skipping it here keeps users and vendors on the right login page.
       if (pathname === "/account/login" || pathname === "/account/signup") return true;
       if (pathname.startsWith("/account")) return !!auth;
       return true;
