@@ -43,10 +43,10 @@ export default function Navbar({ userInitials }: NavbarProps = {}) {
               { label: "Planning", href: "/plan" },
               { label: "Functions", href: "/functions" },
               { label: "ShaadiWall", href: "/wall" },
+              { label: "Stories", href: "/stories" },
               { label: "Astro", href: "/astro" },
               { label: "Muhurat", href: "/muhurat" },
               { label: "Finance", href: "/finance" },
-              { label: "About", href: "/about" },
             ].map((link) => (
               <Link
                 key={link.href}
