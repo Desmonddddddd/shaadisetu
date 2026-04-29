@@ -74,6 +74,14 @@ export default async function VendorsPage({
           <p className="fade-up stagger-2 mt-4 text-cream/80 max-w-xl mx-auto leading-relaxed font-light text-sm md:text-base">
             A hand-vetted directory of India&apos;s finest wedding artisans.
           </p>
+          <p className="fade-up stagger-3 mt-5 text-[0.7rem] uppercase tracking-[0.22em]">
+            <a
+              href="/discover"
+              className="text-champagne hover:text-cream transition-colors"
+            >
+              Or describe your vibe — let AI match for you →
+            </a>
+          </p>
         </div>
       </section>
 
