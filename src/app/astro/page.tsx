@@ -106,10 +106,18 @@ export default function AstroLandingPage() {
             ))}
           </div>
 
-          <p className="mt-12 text-[0.7rem] uppercase tracking-[0.18em] text-ink-soft text-center max-w-3xl mx-auto leading-relaxed">
-            For guidance, not prediction. Astrological readings are
-            interpretive — pair them with your own judgement.
-          </p>
+          <div className="mt-12 text-center">
+            <Link
+              href="/muhurat"
+              className="text-[0.7rem] uppercase tracking-[0.22em] text-bordeaux hover:text-ink transition-colors"
+            >
+              Browse auspicious dates →
+            </Link>
+            <p className="mt-6 text-[0.7rem] uppercase tracking-[0.18em] text-ink-soft max-w-3xl mx-auto leading-relaxed">
+              For guidance, not prediction. Astrological readings are
+              interpretive — pair them with your own judgement.
+            </p>
+          </div>
         </div>
       </section>
     </main>

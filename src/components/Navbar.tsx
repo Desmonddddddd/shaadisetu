@@ -37,13 +37,14 @@ export default function Navbar({ userInitials }: NavbarProps = {}) {
           </Link>
 
           {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-6 lg:gap-7">
+          <nav className="hidden md:flex items-center gap-4 lg:gap-6">
             {[
               { label: "Vendors", href: "/vendors" },
               { label: "Planning", href: "/plan" },
               { label: "Functions", href: "/functions" },
               { label: "ShaadiWall", href: "/wall" },
               { label: "Astro", href: "/astro" },
+              { label: "Muhurat", href: "/muhurat" },
               { label: "Finance", href: "/finance" },
               { label: "About", href: "/about" },
             ].map((link) => (

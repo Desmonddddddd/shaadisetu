@@ -75,6 +75,13 @@ export default function MobileMenu() {
               Astro
             </Link>
             <Link
+              href="/muhurat"
+              onClick={() => setIsOpen(false)}
+              className="px-4 py-2 text-sm font-medium text-slate-700 hover:bg-cream-soft rounded-lg transition-colors"
+            >
+              Muhurat
+            </Link>
+            <Link
               href="/finance"
               onClick={() => setIsOpen(false)}
               className="px-4 py-2 text-sm font-medium text-slate-700 hover:bg-cream-soft rounded-lg transition-colors"
