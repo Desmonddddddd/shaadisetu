@@ -182,7 +182,7 @@ function MuhuratCard({ muhurat, index }: { muhurat: Muhurat; index: number }) {
       )}
 
       <a
-        href={`/astro/match`}
+        href={`/muhurat/match`}
         className="mt-4 inline-block text-[0.62rem] uppercase tracking-[0.2em] text-bordeaux hover:text-ink transition-colors"
       >
         Match kundlis for this date →

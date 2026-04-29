@@ -82,13 +82,6 @@ export default function MobileMenu() {
               Stories
             </Link>
             <Link
-              href="/astro"
-              onClick={() => setIsOpen(false)}
-              className="px-4 py-2 text-sm font-medium text-slate-700 hover:bg-cream-soft rounded-lg transition-colors"
-            >
-              Astro
-            </Link>
-            <Link
               href="/muhurat"
               onClick={() => setIsOpen(false)}
               className="px-4 py-2 text-sm font-medium text-slate-700 hover:bg-cream-soft rounded-lg transition-colors"

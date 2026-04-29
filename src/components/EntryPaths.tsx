@@ -45,11 +45,11 @@ const paths: Path[] = [
   },
   {
     number: "04",
-    eyebrow: "Kundli & Astro",
+    eyebrow: "Kundli & Muhurat",
     title: "Match the stars",
     description:
-      "Vedic Guna Milan compatibility and personal birth-chart readings — computed traditionally, explained in plain English.",
-    href: "/astro",
+      "Vedic Guna Milan compatibility and curated auspicious dates from the Panchang — traditionally computed, explained in plain English.",
+    href: "/muhurat",
     cover:
       "https://images.unsplash.com/photo-1532009877282-3340270e0529?w=1600&q=80",
   },

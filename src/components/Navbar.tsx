@@ -44,7 +44,6 @@ export default function Navbar({ userInitials }: NavbarProps = {}) {
               { label: "Functions", href: "/functions" },
               { label: "ShaadiWall", href: "/wall" },
               { label: "Stories", href: "/stories" },
-              { label: "Astro", href: "/astro" },
               { label: "Muhurat", href: "/muhurat" },
               { label: "Finance", href: "/finance" },
             ].map((link) => (
