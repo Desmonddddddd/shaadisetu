@@ -99,3 +99,38 @@ export const astroLeadSchema = z.object({
   gender2: z.enum(["male", "female", "other"]).optional(),
 });
 export type AstroLeadInput = z.infer<typeof astroLeadSchema>;
+
+export const CEREMONY_OPTIONS = [
+  "haldi",
+  "mehendi",
+  "sangeet",
+  "wedding",
+  "reception",
+  "engagement",
+  "general",
+] as const;
+
+export const budgetItemSchema = z.object({
+  ceremony: z.enum(CEREMONY_OPTIONS),
+  category: z.string().trim().min(2).max(60),
+  label: z.string().trim().min(2).max(120),
+  plannedAmount: z.number().int().min(0).max(100_000_000),
+  actualAmount: z.number().int().min(0).max(100_000_000).optional().nullable(),
+  vendorId: z.string().trim().max(80).optional().nullable(),
+  paid: z.boolean().optional(),
+  notes: z.string().trim().max(500).optional().nullable(),
+});
+export type BudgetItemInput = z.infer<typeof budgetItemSchema>;
+
+export const budgetItemUpdateSchema = budgetItemSchema.partial();
+export type BudgetItemUpdate = z.infer<typeof budgetItemUpdateSchema>;
+
+export const weddingProfileSchema = z.object({
+  weddingDate: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "Use YYYY-MM-DD")
+    .optional()
+    .nullable(),
+  totalBudget: z.number().int().min(0).max(1_000_000_000).optional().nullable(),
+});
+export type WeddingProfileInput = z.infer<typeof weddingProfileSchema>;

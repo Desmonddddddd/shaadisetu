@@ -186,6 +186,34 @@ model Enquiry {
   @@index([vendorId, createdAt])
 }
 
+model WeddingProfile {
+  id           String       @id @default(cuid())
+  userId       String       @unique
+  weddingDate  String?
+  totalBudget  Int?
+  budgetItems  BudgetItem[]
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+}
+
+model BudgetItem {
+  id             String         @id @default(cuid())
+  profile        WeddingProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId      String
+  ceremony       String
+  category       String
+  label          String
+  plannedAmount  Int
+  actualAmount   Int?
+  vendorId       String?
+  paid           Boolean        @default(false)
+  notes          String?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  @@index([profileId, ceremony])
+}
+
 model AstroLead {
   id        String   @id @default(cuid())
   email     String
