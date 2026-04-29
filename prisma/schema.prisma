@@ -214,6 +214,40 @@ model BudgetItem {
   @@index([profileId, ceremony])
 }
 
+model WeddingSite {
+  id         String   @id @default(cuid())
+  userId     String   @unique
+  slug       String   @unique
+  headline   String
+  coupleNames String
+  heroImage  String?
+  events     String   // JSON: [{name, date, venue, dressCode}]
+  isPublic   Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  guests     Guest[]
+}
+
+model Guest {
+  id          String      @id @default(cuid())
+  site        WeddingSite @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  siteId      String
+  name        String
+  side        String      // "bride" | "groom" | "both"
+  email       String?
+  phone       String?
+  invitedTo   String      // CSV of event names
+  rsvpStatus  String      @default("pending") // "pending"|"yes"|"no"|"maybe"
+  plusOnes    Int         @default(0)
+  dietary     String?
+  notes       String?
+  rsvpToken   String      @unique @default(cuid())
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([siteId, rsvpStatus])
+}
+
 model AstroLead {
   id        String   @id @default(cuid())
   email     String

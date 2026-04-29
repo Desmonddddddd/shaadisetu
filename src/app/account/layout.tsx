@@ -20,6 +20,7 @@ export default async function AccountLayout({ children }: { children: React.Reac
         <NavLink href="/account/saved">Saved vendors</NavLink>
         <NavLink href="/account/enquiries">My enquiries</NavLink>
         <NavLink href="/account/budget">Budget</NavLink>
+        <NavLink href="/account/wedding">Microsite</NavLink>
         <form
           action={async () => {
             "use server";

@@ -134,3 +134,34 @@ export const weddingProfileSchema = z.object({
   totalBudget: z.number().int().min(0).max(1_000_000_000).optional().nullable(),
 });
 export type WeddingProfileInput = z.infer<typeof weddingProfileSchema>;
+
+export const weddingEventSchema = z.object({
+  name: z.string().trim().min(2).max(60),
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  venue: z.string().trim().min(2).max(160),
+  dressCode: z.string().trim().max(60).optional(),
+});
+
+export const weddingSiteSchema = z.object({
+  slug: z
+    .string()
+    .trim()
+    .min(3)
+    .max(40)
+    .regex(/^[a-z0-9-]+$/, "Letters, numbers, hyphens only"),
+  headline: z.string().trim().min(2).max(160),
+  coupleNames: z.string().trim().min(2).max(80),
+  heroImage: z.string().trim().url().optional().nullable(),
+  events: z.array(weddingEventSchema).max(8),
+  isPublic: z.boolean(),
+});
+export type WeddingSiteInput = z.infer<typeof weddingSiteSchema>;
+
+export const rsvpSchema = z.object({
+  rsvpToken: z.string().trim().min(8).max(40),
+  status: z.enum(["yes", "no", "maybe"]),
+  plusOnes: z.number().int().min(0).max(8).optional(),
+  dietary: z.string().trim().max(120).optional(),
+  notes: z.string().trim().max(500).optional(),
+});
+export type RsvpInput = z.infer<typeof rsvpSchema>;
